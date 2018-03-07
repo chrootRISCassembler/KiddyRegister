@@ -1,17 +1,12 @@
 package capslock.kiddy_register.main;
 
 import capslock.game_info.GameInfoBuilder;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class WriteController implements IController {
 

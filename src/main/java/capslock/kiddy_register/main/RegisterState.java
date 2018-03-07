@@ -3,12 +3,9 @@ package capslock.kiddy_register.main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import methg.commonlib.trivial_logger.Logger;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import methg.commonlib.trivial_logger.Logger;
 
 public enum RegisterState {
     INIT_GAME_ROOT_DIR("InitGameRootDir.fxml"),

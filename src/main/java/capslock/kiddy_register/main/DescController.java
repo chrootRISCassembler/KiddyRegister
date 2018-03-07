@@ -2,7 +2,6 @@ package capslock.kiddy_register.main;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import methg.commonlib.trivial_logger.Logger;
 
 public class DescController implements IController {

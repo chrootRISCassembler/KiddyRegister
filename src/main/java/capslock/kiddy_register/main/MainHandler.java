@@ -15,12 +15,8 @@
 
 package capslock.kiddy_register.main;
 
-import javafx.stage.Stage;
-import methg.commonlib.trivial_logger.Logger;
-
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 enum MainHandler {
     INST;

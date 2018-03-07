@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import methg.commonlib.trivial_logger.Logger;
 
 import java.io.File;
 import java.nio.file.Files;
