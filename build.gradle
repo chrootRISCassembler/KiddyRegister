@@ -1,0 +1,129 @@
+/*
+    Copyright (C) 2018 RISCassembler
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+
+group 'capslock'
+version '1.0.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+mainClassName = 'capslock.kiddy_register.main.Main'
+
+repositories {
+    mavenCentral()
+    flatDir{
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    compile group: 'org.json', name: 'json', version:  '+'
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+
+    compile name: "file_checker"
+    compile name: "trivial_logger"
+    compile name: "game_info"
+}
+
+tasks.withType(JavaCompile){
+    options.encoding = 'UTF-8'
+}
+
+compileJava.doFirst {
+    def libDir = Paths.get(System.getProperty("user.dir") + "/lib/")
+    if (Files.notExists(libDir)) {
+        Files.createDirectory(libDir)
+    }
+
+    def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/file_checker.jar")
+    if (Files.notExists(file_checkerPath)) {
+        println "Downloading file_checker.jar ..."
+        try {
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/file_checker-1.0.0-SNAPSHOT.jar")
+            InputStream inStream = website.openStream()
+            Files.copy(inStream, file_checkerPath, StandardCopyOption.REPLACE_EXISTING)
+
+            println "Download succeeded "
+        } catch (Exception ex) {
+            println "Download failed"
+            throw ex
+        }
+    }
+
+    def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/trivial_logger.jar")
+    if (Files.notExists(trivial_loggerPath)) {
+        println "Downloading trivial_logger.jar ..."
+        try {
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/trivial_logger-1.0.0-SNAPSHOT.jar")
+            InputStream inStream = website.openStream()
+            Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
+
+            println "Download succeeded "
+        } catch (Exception ex) {
+            println "Download failed"
+            throw ex
+        }
+    }
+}
+
+task forceUpdateLib{
+    doLast {
+        println "force update library"
+
+        def libDir = Paths.get(System.getProperty("user.dir") + "/lib/")
+        if (Files.notExists(libDir)) {
+            Files.createDirectory(libDir)
+        }
+
+        println "Downloading file_checker.jar ..."
+        try {
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/file_checker-1.0.0-SNAPSHOT.jar")
+            InputStream inStream = website.openStream()
+            def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/file_checker.jar")
+            Files.copy(inStream, file_checkerPath, StandardCopyOption.REPLACE_EXISTING)
+            println "Download succeeded "
+        } catch (Exception ex) {
+            println "Download failed"
+            throw ex
+        }
+
+        println "Downloading trivial_logger.jar ..."
+        try {
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/trivial_logger-1.0.0-SNAPSHOT.jar")
+            InputStream inStream = website.openStream()
+            def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/trivial_logger.jar")
+            Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
+            println "Download succeeded "
+        } catch (Exception ex) {
+            println "Download failed"
+            throw ex
+        }
+    }
+}
+
+task cpFXML(type: Copy){
+    from 'src/main/resources'
+    into 'build/classes/java/main/capslock/kiddy_register/main'
+}
+
+run {
+    tasks.cpFXML.execute()
+}
