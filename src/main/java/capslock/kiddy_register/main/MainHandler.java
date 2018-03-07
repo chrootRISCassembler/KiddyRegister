@@ -15,6 +15,8 @@
 
 package capslock.kiddy_register.main;
 
+import capslock.game_info.GameInfoBuilder;
+
 import java.nio.file.Path;
 import java.util.List;
 
@@ -24,6 +26,8 @@ enum MainHandler {
     private MainController controller;
     private RegisterState state = RegisterState.INIT_GAME_ROOT_DIR;
     Path connectedJSON = null;
+
+    private final GameInfoBuilder builder = new GameInfoBuilder();
 
     private Path gameRootDir;
     private Path exe;
@@ -59,6 +63,7 @@ enum MainHandler {
     final int getId(){return id;}
 
     final RegisterState nextState(){
+        state.getController().transition();
         return state = state.next();
     }
     final RegisterState prevState(){

@@ -11,4 +11,11 @@ public interface IController {
     default void init(){
         Logger.INST.debug("Default method IController#init called");
     }
+
+    /**
+     * 別の表示状態に遷移するとき,つまり見えなくなるときに呼び出される.
+     */
+    default void transition() {
+        Logger.INST.debug("Default method IController#init called");
+    }
 }
