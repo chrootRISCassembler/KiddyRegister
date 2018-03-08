@@ -16,9 +16,11 @@
 package capslock.kiddy_register.main;
 
 import capslock.game_info.GameInfoBuilder;
+import methg.commonlib.trivial_logger.Logger;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 enum MainHandler {
     INST;
@@ -41,7 +43,11 @@ enum MainHandler {
     final void setGameRootDir(Path path){ gameRootDir = path;}
     final Path getGameRootDir(){ return gameRootDir; }
 
-    final void setExe(Path path){exe = path;}
+    final void setExe(Path path){
+        exe = gameRootDir.relativize(path);
+        Logger.INST.debug(exe.toString());
+    }
+
     final Path getExe(){return exe;}
 
     final void setName(String name){this.name = name;}
@@ -50,13 +56,24 @@ enum MainHandler {
     final void setDesc(String desc){this.desc = desc;}
     final String getDesc(){return desc;}
 
-    final void setPanel(Path path){panel = path;}
+    final void setPanel(Path path){
+        panel = gameRootDir.relativize(path);
+        Logger.INST.debug(panel.toString());
+    }
     final Path getPanel(){return panel;}
 
-    final void setImageList(List<Path> list){imageList = list;}
+    final void setImageList(List<Path> list){
+        imageList = list.stream()
+                .map(path -> gameRootDir.relativize(path))
+                .collect(Collectors.toList());
+    }
     final List<Path> getImageList(){return imageList;}
 
-    final void setMovieList(List<Path> list){movieList = list;}
+    final void setMovieList(List<Path> list) {
+        movieList = list.stream()
+                .map(path -> gameRootDir.relativize(path))
+                .collect(Collectors.toList());
+    }
     final List<Path> getMovieList(){return  movieList;}
 
     final void setID(int id){this.id = id;}
