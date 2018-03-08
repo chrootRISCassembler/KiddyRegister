@@ -38,7 +38,6 @@ public class MovieController implements IController {
             if(validFile.isPresent()){
                 //画像として読み込めるかどうかのチェック
                 movieList.add(validFile.get());
-                break;
             }
         }
 

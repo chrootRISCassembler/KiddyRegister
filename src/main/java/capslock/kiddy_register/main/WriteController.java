@@ -18,6 +18,9 @@ public class WriteController implements IController {
         final GameInfoBuilder builder = new GameInfoBuilder();
         final MainHandler handler = MainHandler.INST;
 
+        System.err.println(handler.getImageList());
+        System.err.println(handler.getMovieList());
+
         final capslock.game_info.GameRecord record = builder.setExe(handler.getExe())
                 .setName(handler.getName())
                 .setDesc(handler.getDesc())

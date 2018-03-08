@@ -40,7 +40,6 @@ public class ImageController implements IController {
             if(validFile.isPresent()){
                 //画像として読み込めるかどうかのチェック
                 imageList.add(validFile.get());
-                break;
             }
         }
 
