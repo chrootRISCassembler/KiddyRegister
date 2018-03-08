@@ -58,7 +58,8 @@ public class ExeController implements IController{
                     .onCanExec(dummy -> true)
                     .check();
 
-            if(exe.isPresent())event.acceptTransferModes(TransferMode.LINK);
+            if(exe.isPresent() && exe.get().startsWith(MainHandler.INST.getGameRootDir()))
+                event.acceptTransferModes(TransferMode.LINK);
         }
         event.consume();
     }

@@ -47,12 +47,13 @@ public class PanelController implements IController {
 
             final Path exePath = fileList.get(0).toPath();
 
-            final Optional<Path> exe = new FileChecker(exePath)
+            final Optional<Path> panel = new FileChecker(exePath)
                     .onCannotWrite(dummy -> true)
                     .onCanExec(dummy -> true)
                     .check();
 
-            if (exe.isPresent()) event.acceptTransferModes(TransferMode.LINK);
+            if (panel.isPresent() && panel.get().startsWith(MainHandler.INST.getGameRootDir()))
+                event.acceptTransferModes(TransferMode.LINK);
         }
         event.consume();
     }

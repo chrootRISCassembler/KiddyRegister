@@ -61,6 +61,8 @@ public class MovieController implements IController {
                         .check();
 
                 if(validFile.isPresent()){
+                    if(!validFile.get().startsWith(MainHandler.INST.getGameRootDir()))continue;
+
                     //画像として読み込めるかどうかのチェック
 
                     event.acceptTransferModes(TransferMode.LINK);
