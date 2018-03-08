@@ -21,4 +21,9 @@ public class NameController implements IController {
 
         MainHandler.INST.getController().enableNextButton();
     }
+
+    @Override
+    public final void transition(){
+        MainHandler.INST.setName(textField.getText());
+    }
 }

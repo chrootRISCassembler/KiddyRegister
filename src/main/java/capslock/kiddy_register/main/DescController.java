@@ -16,4 +16,9 @@ public class DescController implements IController {
 
         MainHandler.INST.getController().enableNextButton();
     }
+
+    @Override
+    public final void transition(){
+        MainHandler.INST.setDesc(textArea.getText());
+    }
 }
