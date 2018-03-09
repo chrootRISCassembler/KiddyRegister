@@ -16,18 +16,23 @@
 package capslock.kiddy_register.main;
 
 import capslock.game_info.GameInfoBuilder;
+import capslock.game_info.GameRecord;
+import capslock.game_info.JSONDBWriter;
 import methg.commonlib.trivial_logger.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
 enum MainHandler {
     INST;
 
+    private final Path JSON_PATH = Paths.get("./sign.json");
+
     private MainController controller;
     private RegisterState state = RegisterState.INIT_GAME_ROOT_DIR;
-    Path connectedJSON = null;
 
     private final GameInfoBuilder builder = new GameInfoBuilder();
 
@@ -92,6 +97,26 @@ enum MainHandler {
     }
     final MainController getController(){
         return controller;
+    }
+
+    final void writeToJSON(){
+        final GameInfoBuilder builder = new GameInfoBuilder();
+        final MainHandler handler = MainHandler.INST;
+
+        final GameRecord record = builder.setExe(handler.getExe())
+                .setName(name)
+                .setDesc(desc)
+                .setPanel(panel)
+                .setImageList(imageList)
+                .setMovieList(movieList)
+                .setGameID(id)
+                .buildGameRecord();
+
+        try {
+            new JSONDBWriter(JSON_PATH).add(record).flush();
+        }catch (IOException ex){
+            Logger.INST.logException(ex);
+        }
     }
 
     void run(){
