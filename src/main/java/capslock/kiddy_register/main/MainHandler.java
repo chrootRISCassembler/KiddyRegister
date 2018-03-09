@@ -34,8 +34,6 @@ enum MainHandler {
     private MainController controller;
     private RegisterState state = RegisterState.INIT_GAME_ROOT_DIR;
 
-    private final GameInfoBuilder builder = new GameInfoBuilder();
-
     private Path gameRootDir;
     private Path exe;
     private String name;
@@ -101,9 +99,8 @@ enum MainHandler {
 
     final void writeToJSON(){
         final GameInfoBuilder builder = new GameInfoBuilder();
-        final MainHandler handler = MainHandler.INST;
 
-        final GameRecord record = builder.setExe(handler.getExe())
+        final GameRecord record = builder.setExe(exe)
                 .setName(name)
                 .setDesc(desc)
                 .setPanel(panel)

@@ -2,8 +2,6 @@ package capslock.kiddy_register.main;
 
 import methg.commonlib.trivial_logger.Logger;
 
-import java.io.IOException;
-
 public class WriteController implements IController {
 
 
