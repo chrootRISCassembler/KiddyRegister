@@ -15,8 +15,7 @@
 
 package capslock.kiddy_register.main;
 
-import capslock.game_info.GameInfoBuilder;
-import capslock.game_info.GameRecord;
+import capslock.game_info.GameDocument;
 import capslock.game_info.JSONDBWriter;
 import methg.commonlib.trivial_logger.Logger;
 
@@ -35,52 +34,45 @@ enum MainHandler {
     private RegisterState state = RegisterState.INIT_GAME_ROOT_DIR;
 
     private Path gameRootDir;
-    private Path exe;
-    private String name;
-    private String desc;
-    private Path panel;
-    private List<Path> imageList;
-    private List<Path> movieList;
-    private int id;
+    private GameDocument doc = new GameDocument();
 
-    final void setGameRootDir(Path path){ gameRootDir = path;}
+    final void setGameRootDir(Path path){
+        gameRootDir = path;
+    }
     final Path getGameRootDir(){ return gameRootDir; }
 
+    final Path getExe(){ return doc.getExe(); }
+    final String getName(){ return doc.getName(); }
+    final String getDesc(){ return doc.getDesc(); }
+    final Path getPanel(){ return doc.getPanel(); }
+    final List<Path> getImageList(){ return doc.getImageList(); }
+    final List<Path> getMovieList(){ return doc.getMovieList(); }
+    final int getID(){ return doc.getGameID(); }
+
     final void setExe(Path path){
-        exe = gameRootDir.relativize(path);
-        Logger.INST.debug(exe.toString());
+        doc.setExe(toPortablePath(path));
+        Logger.INST.info(() -> "Exe will save as " + doc.getExe().toString());
     }
 
-    final Path getExe(){return exe;}
-
-    final void setName(String name){this.name = name;}
-    final String getName(){return name;}
-
-    final void setDesc(String desc){this.desc = desc;}
-    final String getDesc(){return desc;}
+    final void setName(String name){ doc.setName(name); }
+    final void setDesc(String desc){ doc.setDesc(desc); }
 
     final void setPanel(Path path){
-        panel = gameRootDir.relativize(path);
-        Logger.INST.debug(panel.toString());
+        doc.setPanel(toPortablePath(path));
+        Logger.INST.info(() -> "Panel will save as " + doc.getPanel().toString());
     }
-    final Path getPanel(){return panel;}
-
     final void setImageList(List<Path> list){
-        imageList = list.stream()
-                .map(path -> gameRootDir.relativize(path))
-                .collect(Collectors.toList());
+        doc.setImageList(list.stream()
+                .map(this::toPortablePath)
+                .collect(Collectors.toList()));
     }
-    final List<Path> getImageList(){return imageList;}
-
     final void setMovieList(List<Path> list) {
-        movieList = list.stream()
-                .map(path -> gameRootDir.relativize(path))
-                .collect(Collectors.toList());
+        doc.setMovieList(list.stream()
+                .map(this::toPortablePath)
+                .collect(Collectors.toList()));
     }
-    final List<Path> getMovieList(){return  movieList;}
 
-    final void setID(int id){this.id = id;}
-    final int getId(){return id;}
+    final void setID(int id){ doc.setGameID(id); }
 
     final RegisterState nextState(){
         state.getController().transition();
@@ -88,6 +80,15 @@ enum MainHandler {
     }
     final RegisterState prevState(){
         return state.prev();
+    }
+
+    private Path toPortablePath(Path realPath){
+        Logger.INST.debug(() -> "Real path is \"" + realPath + '\"');
+        final Path realRelativePath = gameRootDir.relativize(realPath);
+        Logger.INST.debug(() -> "Real relative path is \"" + realRelativePath + '\"');
+        final Path portableRelativePath = Paths.get("Games/" + gameRootDir.getFileName() + '/' + realRelativePath);
+        Logger.INST.debug(() -> "portable path is \"" + portableRelativePath + '\"');
+        return portableRelativePath;
     }
 
     void setController(MainController controller){
@@ -98,19 +99,8 @@ enum MainHandler {
     }
 
     final void writeToJSON(){
-        final GameInfoBuilder builder = new GameInfoBuilder();
-
-        final GameRecord record = builder.setExe(exe)
-                .setName(name)
-                .setDesc(desc)
-                .setPanel(panel)
-                .setImageList(imageList)
-                .setMovieList(movieList)
-                .setGameID(id)
-                .buildGameRecord();
-
         try {
-            new JSONDBWriter(JSON_PATH).add(record).flush();
+            new JSONDBWriter(JSON_PATH).add(doc).flush();
         }catch (IOException ex){
             Logger.INST.logException(ex);
         }
