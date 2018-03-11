@@ -79,7 +79,7 @@ enum MainHandler {
         return state = state.next();
     }
     final RegisterState prevState(){
-        return state.prev();
+        return state = state.prev();
     }
 
     private Path toPortablePath(Path realPath){

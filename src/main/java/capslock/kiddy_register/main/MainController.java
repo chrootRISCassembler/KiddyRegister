@@ -36,7 +36,7 @@ public class MainController implements IController{
         replace(MainHandler.INST.nextState());
     }
 
-    @FXML private void onPrevClicked(ActionEvent event){
+    @FXML private void onPrevClicked(ActionEvent event){ replace(MainHandler.INST.prevState());
 
     }
 
