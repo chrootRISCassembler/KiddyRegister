@@ -128,7 +128,7 @@ enum MainHandler {
     final void launch(){
         final Stage launcherStage = new Stage();
         final CapsLock launcher = new CapsLock();
-        launcher.InjectionPoint(launcherStage, gameRootDir + "/" + JSON_PATH, MainHandler.INST.getGameRootDir().toString());
+        launcher.InjectionPoint(launcherStage, Paths.get(gameRootDir + "/" + JSON_PATH), MainHandler.INST.getGameRootDir().toString());
     }
 
     final void init(Stage stage){
