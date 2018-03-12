@@ -10,5 +10,7 @@ public class WriteController extends ChildController{
         Logger.INST.debug("WriteController#init called");
 
         MainHandler.INST.writeToJSON();
+
+        MainHandler.INST.cacheGameRoot();
     }
 }

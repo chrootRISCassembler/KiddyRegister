@@ -24,10 +24,14 @@ import javafx.stage.Stage;
 import methg.commonlib.file_checker.FileChecker;
 import methg.commonlib.trivial_logger.Logger;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
@@ -39,7 +43,7 @@ enum MainHandler {
     /**
      * 自身のjarに保存するファイルパスのキャッシュ
      */
-    private static final String PATH_CACHE = "PathCache.properties";
+    private static final Path PATH_CACHE = Paths.get("./.PathCache.properties");
     private static final Path JSON_PATH = Paths.get(".signature.json");
 
     private Mode mode;
@@ -111,34 +115,58 @@ enum MainHandler {
 
     final void writeToJSON(){
         Logger.INST.debug(doc.getExe().toString());
-        doc.setLastMod(Instant.now());
 
+        final Path writePath = Paths.get(gameRootDir + "/" + JSON_PATH);
+
+        doc.setLastMod(Instant.now());
         try {
-            new JSONDBWriter(JSON_PATH).add(doc).flush();
+            new JSONDBWriter(writePath).add(doc).flush();
         }catch (IOException ex){
             Logger.INST.logException(ex);
         }
     }
 
     final void init(Stage stage){
+        Logger.INST.debug("MainHandler#init");
         this.stage = stage;
 
         try {
-            final InputStream inputStream = getClass().getResourceAsStream(PATH_CACHE);
+            final BufferedReader reader = Files.newBufferedReader(PATH_CACHE);
             final Properties properties = new Properties();
-            properties.load(inputStream);
-            inputStream.close();
+            properties.load(reader);
+            reader.close();
 
             final String cachedGameRoot = properties.getProperty("cachedGameRoot");
-            final Path signatureJSONPath = new FileChecker(cachedGameRoot + '/' + JSON_PATH)
-                    .onCanExec(dummy -> true)
-                    .check()
-                    .get();
-            mode = Mode.UPDATE;
+            final Path signatureJSONPath = Paths.get(cachedGameRoot + '/' + JSON_PATH);
+            if(Files.isReadable(signatureJSONPath)) {
+                mode = Mode.UPDATE;
+                Logger.INST.info("Run as UPDATE mode.");
+
+            }else{
+                Logger.INST.debug("not readable");
+                if(Files.exists(signatureJSONPath)){
+                    Logger.INST.debug("found");
+                }else{
+                    Logger.INST.info(signatureJSONPath.toString());
+                }
+
+            }
 
         }catch (IOException | NullPointerException ex){
             Logger.INST.debug("Failed to get InputStream from " + PATH_CACHE + ".");
             mode = Mode.REGISTER;
+        }
+    }
+
+    final void cacheGameRoot(){
+        final Properties properties = new Properties();
+        properties.setProperty("cachedGameRoot", gameRootDir.toString());
+
+        try(final BufferedWriter writer = Files.newBufferedWriter(PATH_CACHE, StandardOpenOption.CREATE)){
+            properties.store(writer, null);
+        }catch (IOException ex){
+            Logger.INST.critical("Failed to write path of gameRootDir to " + PATH_CACHE)
+                    .logException(ex);
         }
     }
 
