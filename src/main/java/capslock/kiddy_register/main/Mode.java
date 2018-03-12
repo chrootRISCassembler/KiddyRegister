@@ -34,10 +34,7 @@ enum Mode {
                 constListBuilder.add(State.REGISTER_IMAGE);
                 constListBuilder.add(State.REGISTER_MOVIE);
 
-                //switch (this){//if-statementが何故か使えない
-                //    case REGISTER:
-                //        constListBuilder.add(State.REGISTER_GAME_ID);
-                //}
+                if (ordinal() == 0)constListBuilder.add(State.REGISTER_GAME_ID);
 
                 constListBuilder.add(State.WRITE_JSON);
             case 2: //Fall through
