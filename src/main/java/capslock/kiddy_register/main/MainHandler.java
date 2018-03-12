@@ -16,18 +16,16 @@
 package capslock.kiddy_register.main;
 
 import capslock.game_info.GameDocument;
+import capslock.game_info.JSONDBReader;
 import capslock.game_info.JSONDBWriter;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import methg.commonlib.file_checker.FileChecker;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,7 +51,7 @@ enum MainHandler {
 
     private MainController controller;
 
-    private GameDocument doc = new GameDocument();
+    private GameDocument doc;
 
     final void setGameRootDir(Path path){
         gameRootDir = path;
@@ -137,24 +135,22 @@ enum MainHandler {
             reader.close();
 
             final String cachedGameRoot = properties.getProperty("cachedGameRoot");
+            gameRootDir = Paths.get(cachedGameRoot);
             final Path signatureJSONPath = Paths.get(cachedGameRoot + '/' + JSON_PATH);
             if(Files.isReadable(signatureJSONPath)) {
                 mode = Mode.UPDATE;
                 Logger.INST.info("Run as UPDATE mode.");
+                doc = new JSONDBReader(signatureJSONPath).getDocumentList().get(0);
 
             }else{
-                Logger.INST.debug("not readable");
-                if(Files.exists(signatureJSONPath)){
-                    Logger.INST.debug("found");
-                }else{
-                    Logger.INST.info(signatureJSONPath.toString());
-                }
-
+                Logger.INST.info(signatureJSONPath + " isn't readable.");
+                throw new NullPointerException();
             }
 
         }catch (IOException | NullPointerException ex){
             Logger.INST.debug("Failed to get InputStream from " + PATH_CACHE + ".");
             mode = Mode.REGISTER;
+            doc = new GameDocument();
         }
     }
 
