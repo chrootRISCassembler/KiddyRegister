@@ -20,17 +20,37 @@ import java.nio.file.StandardCopyOption
 group 'capslock'
 version '1.0.0-SNAPSHOT'
 
-apply plugin: 'groovy'
 apply plugin: 'java'
-apply plugin: 'application'
-
 sourceCompatibility = 1.8
+compileTestJava.enabled = false
+
+apply plugin: 'groovy'
+compileGroovy.enabled = false
+
+apply plugin: 'application'
 mainClassName = 'capslock.kiddy_register.main.Main'
+startScripts.enabled = false
+distZip.enabled = false
+distTar.enabled = false
+
+apply plugin: 'com.github.johnrengelman.shadow'
+startShadowScripts.enabled = false
+shadowDistTar.enabled = false
+shadowDistZip.enabled = false
 
 repositories {
     mavenCentral()
     flatDir{
         dirs 'lib'
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
     }
 }
 
