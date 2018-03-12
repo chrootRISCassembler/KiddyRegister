@@ -10,14 +10,14 @@ import methg.commonlib.trivial_logger.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class IDController implements IController {
+public class IDController extends ChildController{
 
     @FXML private ChoiceBox<Integer> choiceBox;
     @Override
     public final void init() {
         Logger.INST.debug("ID init called");
 
-        MainHandler.INST.getController().disableNextButton();
+        mainController.disableNextButton();
 
         choiceBox.setItems(FXCollections.observableList(IntStream.rangeClosed(1, 100).boxed().collect(Collectors.toList())));
 
@@ -27,7 +27,7 @@ public class IDController implements IController {
                     @Override
                     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                         MainHandler.INST.setID(number2.intValue());
-                        MainHandler.INST.getController().enableNextButton();
+                        mainController.enableNextButton();
                     }
                 });
     }

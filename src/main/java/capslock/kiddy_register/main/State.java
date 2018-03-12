@@ -7,10 +7,8 @@ import methg.commonlib.trivial_logger.Logger;
 
 import java.io.IOException;
 
-public enum RegisterState {
-    MODE_CONFIRMING("ModeConfirming.fxml"),
-    SELECT_MODE("SelectMode.fxml"),
-    INIT_GAME_ROOT_DIR("SetGameRootDir.fxml"),
+enum  State {
+    SET_GAME_ROOT_DIR("SetGameRootDir.fxml"),
     REGISTER_EXE("Exe.fxml"),
     REGISTER_NAME("Name.fxml"),
     REGISTER_DESC("Desc.fxml"),
@@ -18,13 +16,13 @@ public enum RegisterState {
     REGISTER_IMAGE("Image.fxml"),
     REGISTER_MOVIE("Movie.fxml"),
     REGISTER_GAME_ID("ID.fxml"),
-    WRITE_JSON("Write.fxml");
+    WRITE_JSON("Write.fxml"),
+    PREVIEW_LAUNCHER("");
 
-    private IController controller;
+    private ChildController controller;
     private Node rootNode;
 
-
-    private RegisterState(String FXMLLocation){
+    State(String FXMLLocation){
         if(FXMLLocation.isEmpty())return;
 
         final FXMLLoader loader;
@@ -36,29 +34,20 @@ public enum RegisterState {
         try {
             rootNode = loader.load();
         } catch (IOException ex) {
-            Logger.INST.critical("Failed to load SetGameRootDir.fxml");
+            Logger.INST.critical("Failed to load " + FXMLLocation);
             Logger.INST.logException(ex);
             return;
         }
 
-        controller = (IController) loader.getController();
+        controller = (ChildController) loader.getController();
+
     }
 
-    public final RegisterState next(){
-        System.err.println(this.ordinal());
-        return values()[this.ordinal() + 1];
-    }
-
-    public final RegisterState prev(){
-        System.err.println(this.ordinal());
-        return values()[this.ordinal() - 1];
-    }
-
-    public final IController getController(){
+    final ChildController getController(){
         return controller;
     }
 
-    public final Node getRootNode(){
+    final Node getRootNode(){
         return rootNode;
     }
 }

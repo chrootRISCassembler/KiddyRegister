@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import methg.commonlib.trivial_logger.Logger;
 
-public class DescController implements IController {
+public class DescController extends ChildController{
 
     @FXML private TextArea textArea;
 
@@ -14,7 +14,7 @@ public class DescController implements IController {
 
         textArea.setText(MainHandler.INST.getDesc());
 
-        MainHandler.INST.getController().enableNextButton();
+        mainController.enableNextButton();
     }
 
     @Override

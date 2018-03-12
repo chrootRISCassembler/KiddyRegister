@@ -25,60 +25,47 @@ import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
 import methg.commonlib.trivial_logger.Logger;
 
-public class MainController implements IController{
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+public class MainController{
+    private ListIterator<State> stateIte;
+    private ChildController controller;
 
     @FXML private VBox rootVBox;
     @FXML private HBox bottomHBox;
     @FXML private Button prevButton;
     @FXML private Button nextButton;
 
+    void start(List<State> stateList){
+        stateIte = stateList.listIterator();
+
+        final State state = stateIte.next();
+
+        rootVBox.getChildren().add(0, state.getRootNode());
+
+        controller = state.getController();
+        controller.init();
+    }
+
+    @FXML private void onPrevClicked(ActionEvent event){
+
+    }
+
     @FXML private void onNextClicked(ActionEvent event){
-        replace(MainHandler.INST.nextState());
-    }
-
-    @FXML private void onPrevClicked(ActionEvent event){ replace(MainHandler.INST.prevState());
-
-    }
-
-    void onCreate(WindowEvent event) {
-
-    }
-
-    void replace(RegisterState state) {
-        Logger.INST.debug("replace called");
-
-        final ObservableList<Node> nodeList = rootVBox.getChildren();
-
-        if(nodeList.get(0).equals(bottomHBox)){
-            nodeList.add(0, state.getRootNode());
-        }else{
-            nodeList.set(0, state.getRootNode());
-        }
-
-        state.getController().init();
-    }
-
-    /**
-     * 設定項目が正常なとき以外にこのメソッドを呼んではならない
-     */
-    void enablePrevButton(){
-        prevButton.setDisable(false);
-    }
-
-    void disablePrevButton(){
-        prevButton.setDisable(true);
-    }
-
-    /**
-     * ユーザーが次の設定項目に進めるようにする.
-     * 設定項目が正常なとき以外にこのメソッドを呼んではならない
-     */
-    void enableNextButton(){
-        nextButton.setDisable(false);
+        controller.transition();
+        final State state = stateIte.next();
+        rootVBox.getChildren().set(0, state.getRootNode());
+        controller = state.getController();
+        controller.init();
     }
 
     void disableNextButton(){
-        nextButton.setDisable(true);
+
     }
 
+    void enableNextButton(){
+
+    }
 }

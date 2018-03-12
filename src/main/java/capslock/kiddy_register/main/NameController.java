@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import methg.commonlib.trivial_logger.Logger;
 
-public class NameController implements IController {
+public class NameController extends ChildController{
 
     @FXML private TextField textField;
 
@@ -19,7 +19,7 @@ public class NameController implements IController {
             textField.setText(name);
         }
 
-        MainHandler.INST.getController().enableNextButton();
+        mainController.enableNextButton();
     }
 
     @Override

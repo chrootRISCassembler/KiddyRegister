@@ -35,56 +35,35 @@ public class Main extends Application {
 
         Logger.INST.setCurrentLogLevel(LogLevel.DEBUG);
 
-        Logger.INST.info("fixer started.");
+        Logger.INST.info("KiddyRegister started.");
 
         launch(args);
 
-        Logger.INST.info("fixer terminated.");
+        Logger.INST.info("KiddyRegister terminated.");
         Logger.INST.flush();
     }
 
 
     @Override
     public void start(Stage stage) {
-        Logger.INST.debug("Application#start called.");
+        Logger.INST.debug("Main#start called.");
 
-        final FXMLLoader loader;
-        try{
-            loader = new FXMLLoader(getClass().getResource("Main.fxml"));
-        }catch(Exception ex){
-            Logger.INST.critical("Failed to get resource.");
-            Logger.INST.logException(ex);
-            return;
-        }
-
-        final Parent root;
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("ModeConfirming.fxml"));
 
         try {
-            root = loader.load();
-        } catch (IOException ex) {
-            Logger.INST.critical("Failed to load Main.fxml");
-            Logger.INST.logException(ex);
-            return;
-        }
-
-
-        try {
-            final MainController controller = (MainController) loader.getController();
-
-            final Scene scene=new Scene(root);
+            loader.load();
+            final Scene scene = new Scene(loader.getRoot());
             stage.setScene(scene);
             stage.setTitle("ゲーム情報登録ツール");
 
-            MainHandler.INST.setController(controller);
-
-            Logger.INST.debug("Try to display Console window.");
+            Logger.INST.debug("Try to display first window.");
             stage.show();
-
-            MainHandler.INST.setController(controller);
         }catch (Exception ex){
+            Logger.INST.critical("Failed to load ModeConfirming.fxml");
             Logger.INST.logException(ex);
         }
 
-        MainHandler.INST.run();
+        MainHandler.INST.init(stage);
+        ((ModeConfirmingController) loader.getController()).init();
     }
 }

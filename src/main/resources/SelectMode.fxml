@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.SelectModeContorller">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <RadioButton mnemonicParsing="false" text="新規登録" />
+            <RadioButton mnemonicParsing="false" text="登録情報更新" />
+            <RadioButton mnemonicParsing="false" text="ランチャープレビュー" />
+         </children>
+      </HBox>
+      <Button mnemonicParsing="false" text="Button" />
+   </children>
+</VBox>

@@ -17,23 +17,37 @@ package capslock.kiddy_register.main;
 
 import capslock.game_info.GameDocument;
 import capslock.game_info.JSONDBWriter;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import methg.commonlib.file_checker.FileChecker;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 enum MainHandler {
     INST;
 
-    private final Path JSON_PATH = Paths.get("./sign.json");
+    /**
+     * 自身のjarに保存するファイルパスのキャッシュ
+     */
+    private static final String PATH_CACHE = "PathCache.properties";
+    private static final Path JSON_PATH = Paths.get(".signature.json");
+
+    private Mode mode;
+    private Path gameRootDir;
+
+    private Stage stage;
 
     private MainController controller;
-    private RegisterState state = RegisterState.INIT_GAME_ROOT_DIR;
 
-    private Path gameRootDir;
     private GameDocument doc = new GameDocument();
 
     final void setGameRootDir(Path path){
@@ -74,13 +88,15 @@ enum MainHandler {
 
     final void setID(int id){ doc.setGameID(id); }
 
-    final RegisterState nextState(){
-        state.getController().transition();
-        return state = state.next();
-    }
-    final RegisterState prevState(){
-        return state = state.prev();
-    }
+//    final RegisterState nextState(){
+//        state.getController().transition();
+//        return state = state.next();
+//    }
+//    final RegisterState prevState(){
+//        return state = state.prev();
+//    }
+
+
 
     private Path toPortablePath(Path realPath){
         Logger.INST.debug(() -> "Real path is \"" + realPath + '\"');
@@ -91,14 +107,10 @@ enum MainHandler {
         return portableRelativePath;
     }
 
-    void setController(MainController controller){
-        this.controller = controller;
-    }
-    final MainController getController(){
-        return controller;
-    }
 
     final void writeToJSON(){
+        Logger.INST.debug(doc.getExe().toString());
+
         try {
             new JSONDBWriter(JSON_PATH).add(doc).flush();
         }catch (IOException ex){
@@ -106,7 +118,52 @@ enum MainHandler {
         }
     }
 
-    void run(){
-        controller.replace(state);
+    final void init(Stage stage){
+        this.stage = stage;
+
+        try {
+            final InputStream inputStream = getClass().getResourceAsStream(PATH_CACHE);
+            final Properties properties = new Properties();
+            properties.load(inputStream);
+            inputStream.close();
+
+            final String cachedGameRoot = properties.getProperty("cachedGameRoot");
+            final Path signatureJSONPath = new FileChecker(cachedGameRoot + '/' + JSON_PATH)
+                    .onCanExec(dummy -> true)
+                    .check()
+                    .get();
+            mode = Mode.UPDATE;
+
+        }catch (IOException | NullPointerException ex){
+            Logger.INST.debug("Failed to get InputStream from " + PATH_CACHE + ".");
+            mode = Mode.REGISTER;
+        }
+    }
+
+    final Mode getMode(){
+        return mode;
+    }
+
+    final Stage getStage(){
+        return stage;
+    }
+
+    /**
+     * 現在設定されているモードで起動する.
+     */
+    final void confirm(){
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+
+        try {
+            loader.load();
+            stage.setScene(new Scene(loader.getRoot()));
+        } catch (IOException ex) {
+            Logger.INST.critical("Failed to load Main.fxml");
+            Logger.INST.logException(ex);
+        }
+
+        final MainController controller = (MainController) loader.getController();
+        ChildController.mainController = controller;
+        controller.start(mode.getStateList());
     }
 }

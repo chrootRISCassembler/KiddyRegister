@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 
-public class InitGameRootDirController implements IController {
+public class SetGameRootDirController extends ChildController {
     @FXML private Label pathLabel;
 
     @Override
@@ -20,10 +20,10 @@ public class InitGameRootDirController implements IController {
         final Path gameRootDir = MainHandler.INST.getGameRootDir();
         if (gameRootDir == null) {
             pathLabel.setText("まだ指定されていません.");
-            MainHandler.INST.getController().disableNextButton();
+            mainController.disableNextButton();
         } else {
             pathLabel.setText(gameRootDir.toString());
-            MainHandler.INST.getController().enableNextButton();
+            mainController.enableNextButton();
         }
     }
 
@@ -37,7 +37,7 @@ public class InitGameRootDirController implements IController {
         event.setDropCompleted(true);
         event.consume();
 
-        MainHandler.INST.getController().enableNextButton();
+        mainController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event){

@@ -16,14 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ImageController implements IController {
+public class ImageController extends ChildController{
 
     @FXML private FlowPane flowPane;
 
     @Override
     public final void init() {
         Logger.INST.debug("image init called");
-        MainHandler.INST.getController().disableNextButton();
+        mainController.disableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -52,7 +52,7 @@ public class ImageController implements IController {
         event.setDropCompleted(true);
         event.consume();
 
-        MainHandler.INST.getController().enableNextButton();
+        mainController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event) {

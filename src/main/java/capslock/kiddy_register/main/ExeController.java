@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-public class ExeController implements IController{
+public class ExeController extends ChildController{
     @FXML
     private Label pathLabel;
 
@@ -24,10 +24,10 @@ public class ExeController implements IController{
         final Path exe = MainHandler.INST.getExe();
         if (exe == null) {
             pathLabel.setText("まだ指定されていません.");
-            MainHandler.INST.getController().disableNextButton();
+            mainController.disableNextButton();
         } else {
             pathLabel.setText(exe.toString());
-            MainHandler.INST.getController().enableNextButton();
+            mainController.enableNextButton();
         }
     }
 
@@ -41,7 +41,7 @@ public class ExeController implements IController{
         event.setDropCompleted(true);
         event.consume();
 
-        MainHandler.INST.getController().enableNextButton();
+        mainController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event){

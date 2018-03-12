@@ -14,14 +14,14 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-public class PanelController implements IController {
+public class PanelController extends ChildController{
 
     @FXML private ImageView imageView;
 
     @Override
     public final void init() {
         Logger.INST.debug("panel init called");
-        MainHandler.INST.getController().disableNextButton();
+        mainController.disableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -35,7 +35,7 @@ public class PanelController implements IController {
         event.setDropCompleted(true);
         event.consume();
 
-        MainHandler.INST.getController().enableNextButton();
+        mainController.disableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event) {
