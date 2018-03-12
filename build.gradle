@@ -56,7 +56,7 @@ buildscript {
 
 dependencies {
     compile group: 'org.json', name: 'json', version:  '+'
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    testCompile 'org.codehaus.groovy:groovy-all:2.3.11'
 
     compile name: "capslock"
     compile name: "file_checker"
