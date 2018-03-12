@@ -15,6 +15,7 @@
 
 package capslock.kiddy_register.main;
 
+import capslock.capslock.main.CapsLock;
 import capslock.game_info.GameDocument;
 import capslock.game_info.JSONDBReader;
 import capslock.game_info.JSONDBWriter;
@@ -122,6 +123,12 @@ enum MainHandler {
         }catch (IOException ex){
             Logger.INST.logException(ex);
         }
+    }
+
+    final void launch(){
+        final Stage launcherStage = new Stage();
+        final CapsLock launcher = new CapsLock();
+        launcher.InjectionPoint(launcherStage, gameRootDir + "/" + JSON_PATH, MainHandler.INST.getGameRootDir().toString());
     }
 
     final void init(Stage stage){

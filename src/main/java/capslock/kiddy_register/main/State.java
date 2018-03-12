@@ -17,7 +17,7 @@ enum  State {
     REGISTER_MOVIE("Movie.fxml"),
     REGISTER_GAME_ID("ID.fxml"),
     WRITE_JSON("Write.fxml"),
-    PREVIEW_LAUNCHER("");
+    PREVIEW_LAUNCHER("Preview.fxml");
 
     private ChildController controller;
     private Node rootNode;

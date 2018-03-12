@@ -58,6 +58,7 @@ dependencies {
     compile group: 'org.json', name: 'json', version:  '+'
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
 
+    compile name: "capslock"
     compile name: "file_checker"
     compile name: "trivial_logger"
     compile name: "game_info"
