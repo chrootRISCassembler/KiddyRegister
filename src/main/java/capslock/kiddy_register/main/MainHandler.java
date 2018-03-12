@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -110,6 +111,7 @@ enum MainHandler {
 
     final void writeToJSON(){
         Logger.INST.debug(doc.getExe().toString());
+        doc.setLastMod(Instant.now());
 
         try {
             new JSONDBWriter(JSON_PATH).add(doc).flush();
