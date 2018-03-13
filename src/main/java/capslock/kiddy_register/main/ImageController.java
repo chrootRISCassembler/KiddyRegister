@@ -23,7 +23,14 @@ public class ImageController extends ChildController{
     @Override
     public final void init() {
         Logger.INST.debug("image init called");
-        parentController.disableNextButton();
+        MainHandler.INST.getImageList().stream()
+                .map(path -> new ImageView(new Image(path.toUri().toString())))
+                .forEach(imageView -> {
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(flowPane.getHeight() / 3.0);
+                    flowPane.getChildren().add(imageView);
+                });
+        parentController.enableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -45,7 +52,11 @@ public class ImageController extends ChildController{
 
         imageList.stream()
                 .map(path -> new ImageView(new Image(path.toUri().toString())))
-                .forEach(imageView -> flowPane.getChildren().add(imageView));
+                .forEach(imageView -> {
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(flowPane.getHeight() / 3.0);
+                    flowPane.getChildren().add(imageView);
+                });
 
         MainHandler.INST.setImageList(imageList);
 
@@ -76,5 +87,10 @@ public class ImageController extends ChildController{
             }
         }
         event.consume();
+    }
+
+    @Override
+    final void transition() {
+        flowPane.getChildren().clear();
     }
 }
