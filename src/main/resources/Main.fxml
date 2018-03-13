@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
@@ -8,10 +10,19 @@
 
 <VBox fx:id="rootVBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.MainController">
    <children>
-      <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
          <children>
-            <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevClicked" text="前の設定項目へ" visible="false" />
-            <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNextClicked" text="次の設定項目へ" />
+            <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevClicked" prefHeight="60.0" prefWidth="150.0" text="前の設定項目へ" visible="false">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNextClicked" prefHeight="60.0" prefWidth="150.0" text="次の設定項目へ">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
          </children>
       </HBox>
    </children>
