@@ -8,7 +8,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.DescController">
    <children>
-      <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" />
+      <TextArea fx:id="textArea" onKeyReleased="#onTextAreaReleased" prefHeight="200.0" prefWidth="200.0" />
       <Label fx:id="pathLabel" text="ゲームの説明を入力してください" />
    </children>
 </VBox>

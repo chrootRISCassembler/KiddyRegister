@@ -24,7 +24,6 @@ public class ExeController extends ChildController{
         final Path exe = MainHandler.INST.getExe();
         if (exe == null) {
             pathLabel.setText("まだ指定されていません.");
-            mainController.disableNextButton();
         } else {
             pathLabel.setText(exe.toString());
             mainController.enableNextButton();

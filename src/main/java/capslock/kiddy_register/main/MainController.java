@@ -15,18 +15,12 @@
 
 package capslock.kiddy_register.main;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import methg.commonlib.trivial_logger.Logger;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -51,6 +45,8 @@ public class MainController{
     }
 
     @FXML private void onPrevClicked(ActionEvent event){
+        prevButton.setDisable(true);//処理が終わる前に別スレッドがこのメソッドに入れないようにする
+
         controller.transition();
         final State state = stateIte.previous();
         if(!stateIte.hasPrevious())prevButton.setVisible(false);
@@ -62,6 +58,8 @@ public class MainController{
     }
 
     @FXML private void onNextClicked(ActionEvent event){
+        nextButton.setDisable(true);//処理が終わる前に別スレッドがこのメソッドに入れないようにする
+
         controller.transition();
         final State state = stateIte.next();
         if(!stateIte.hasNext())nextButton.setVisible(false);
@@ -73,10 +71,10 @@ public class MainController{
     }
 
     void disableNextButton(){
-
+        nextButton.setDisable(true);
     }
 
     void enableNextButton(){
-
+        nextButton.setDisable(false);
     }
 }

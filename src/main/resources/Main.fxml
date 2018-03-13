@@ -16,7 +16,7 @@
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNextClicked" prefHeight="60.0" prefWidth="150.0" text="次の設定項目へ">
+            <Button fx:id="nextButton" disable="true" mnemonicParsing="false" onAction="#onNextClicked" prefHeight="60.0" prefWidth="150.0" text="次の設定項目へ">
                <HBox.margin>
                   <Insets />
                </HBox.margin>

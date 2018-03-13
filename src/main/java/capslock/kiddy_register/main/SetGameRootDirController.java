@@ -20,7 +20,6 @@ public class SetGameRootDirController extends ChildController {
         final Path gameRootDir = MainHandler.INST.getGameRootDir();
         if (gameRootDir == null) {
             pathLabel.setText("まだ指定されていません.");
-            mainController.disableNextButton();
         } else {
             pathLabel.setText(gameRootDir.toString());
             mainController.enableNextButton();

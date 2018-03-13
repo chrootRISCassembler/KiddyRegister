@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,6 +16,8 @@ public class WriteController extends ChildController{
     @FXML private TableView<Field> tableView;
     @FXML private TableColumn keyCol;
     @FXML private TableColumn valueCol;
+    @FXML private Button writeButton;
+
     private ObservableList<Field> data;
 
     public static class Field{
@@ -52,12 +55,19 @@ public class WriteController extends ChildController{
                 new Field("紹介動画", MainHandler.INST.getMovieList().toString()),
                 new Field("ゲームID", Integer.toString(MainHandler.INST.getID()))
         );
-
         tableView.setItems(data);
+
+        if(MainHandler.INST.getMode() == Mode.UPDATE){
+            mainController.enableNextButton();
+        }
     }
 
     @FXML private void onWritePushed(ActionEvent event){
+        writeButton.setDisable(true);
+
         MainHandler.INST.writeToJSON();
         MainHandler.INST.cacheGameRoot();
+
+        mainController.enableNextButton();
     }
 }
