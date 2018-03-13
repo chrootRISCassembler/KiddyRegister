@@ -2,9 +2,14 @@ package capslock.kiddy_register.main;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import methg.commonlib.trivial_logger.Logger;
+
+import java.io.IOException;
 
 public class ModeConfirmingController{
 
@@ -31,8 +36,12 @@ public class ModeConfirmingController{
 
     @FXML
     private void onSelectPushed(ActionEvent event){
-        //MainHandler.INST.getStage().setScene(new Scene((Parent) State.SELECT_MODE.getRootNode()));
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectMode.fxml"));
 
-        //SELECT_MODE("SelectMode.fxml"),
+        try {
+            MainHandler.INST.getStage().setScene(new Scene(loader.load()));
+        } catch (IOException ex) {
+            Logger.INST.critical("Failed to load SelectMode.fxml").logException(ex);
+        }
     }
 }
