@@ -58,7 +58,7 @@ public class WriteController extends ChildController{
         tableView.setItems(data);
 
         if(MainHandler.INST.getMode() == Mode.UPDATE){
-            mainController.enableNextButton();
+            parentController.enableNextButton();
         }
     }
 
@@ -68,6 +68,6 @@ public class WriteController extends ChildController{
         MainHandler.INST.writeToJSON();
         MainHandler.INST.cacheGameRoot();
 
-        mainController.enableNextButton();
+        parentController.enableNextButton();
     }
 }

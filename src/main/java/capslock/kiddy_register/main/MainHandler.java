@@ -204,7 +204,7 @@ enum MainHandler {
         }
 
         final MainController controller = (MainController) loader.getController();
-        ChildController.mainController = controller;
+        ChildController.parentController = controller;
         controller.start(mode.getStateList());
     }
 }

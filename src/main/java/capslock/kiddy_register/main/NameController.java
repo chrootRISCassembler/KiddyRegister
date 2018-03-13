@@ -3,7 +3,6 @@ package capslock.kiddy_register.main;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 import methg.commonlib.trivial_logger.Logger;
 
 public class NameController extends ChildController{
@@ -26,14 +25,14 @@ public class NameController extends ChildController{
         }else{
             textField.setText(name);
         }
-        mainController.enableNextButton();
+        parentController.enableNextButton();
     }
 
     @FXML private void onTextFieldReleased(KeyEvent event){
         if(textField.getText().isEmpty()){
-            mainController.disableNextButton();
+            parentController.disableNextButton();
         }else{
-            mainController.enableNextButton();
+            parentController.enableNextButton();
         }
     }
 

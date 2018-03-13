@@ -16,15 +16,15 @@ public class DescController extends ChildController{
         final String desc = MainHandler.INST.getDesc();
         if(desc != null && !desc.isEmpty()){
             textArea.setText(desc);
-            mainController.enableNextButton();
+            parentController.enableNextButton();
         }
     }
 
     @FXML private void onTextAreaReleased(KeyEvent event){
         if(textArea.getText().isEmpty()){
-            mainController.disableNextButton();
+            parentController.disableNextButton();
         }else{
-            mainController.enableNextButton();
+            parentController.enableNextButton();
         }
     }
 

@@ -26,7 +26,7 @@ public class ExeController extends ChildController{
             pathLabel.setText("まだ指定されていません.");
         } else {
             pathLabel.setText(exe.toString());
-            mainController.enableNextButton();
+            parentController.enableNextButton();
         }
     }
 
@@ -40,7 +40,7 @@ public class ExeController extends ChildController{
         event.setDropCompleted(true);
         event.consume();
 
-        mainController.enableNextButton();
+        parentController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event){

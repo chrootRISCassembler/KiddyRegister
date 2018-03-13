@@ -17,7 +17,7 @@ public class IDController extends ChildController{
     public final void init() {
         Logger.INST.debug("ID init called");
 
-        mainController.disableNextButton();
+        parentController.disableNextButton();
 
         choiceBox.setItems(FXCollections.observableList(IntStream.rangeClosed(1, 100).boxed().collect(Collectors.toList())));
 
@@ -27,7 +27,7 @@ public class IDController extends ChildController{
                     @Override
                     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                         MainHandler.INST.setID(number2.intValue());
-                        mainController.enableNextButton();
+                        parentController.enableNextButton();
                     }
                 });
     }

@@ -25,7 +25,7 @@ public class PanelController extends ChildController{
         if (panelFile == null)return;
 
         imageView.setImage(new Image(panelFile.toUri().toString()));
-        mainController.enableNextButton();
+        parentController.enableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -39,7 +39,7 @@ public class PanelController extends ChildController{
         event.setDropCompleted(true);
         event.consume();
 
-        mainController.enableNextButton();
+        parentController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event) {

@@ -22,7 +22,7 @@ public class SetGameRootDirController extends ChildController {
             pathLabel.setText("まだ指定されていません.");
         } else {
             pathLabel.setText(gameRootDir.toString());
-            mainController.enableNextButton();
+            parentController.enableNextButton();
         }
     }
 
@@ -36,7 +36,7 @@ public class SetGameRootDirController extends ChildController {
         event.setDropCompleted(true);
         event.consume();
 
-        mainController.enableNextButton();
+        parentController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event){

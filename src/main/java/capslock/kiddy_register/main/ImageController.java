@@ -23,7 +23,7 @@ public class ImageController extends ChildController{
     @Override
     public final void init() {
         Logger.INST.debug("image init called");
-        mainController.disableNextButton();
+        parentController.disableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -52,7 +52,7 @@ public class ImageController extends ChildController{
         event.setDropCompleted(true);
         event.consume();
 
-        mainController.enableNextButton();
+        parentController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event) {

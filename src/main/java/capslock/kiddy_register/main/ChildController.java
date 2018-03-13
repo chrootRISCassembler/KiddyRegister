@@ -3,10 +3,10 @@ package capslock.kiddy_register.main;
 import methg.commonlib.trivial_logger.Logger;
 
 abstract class ChildController {
-    static protected MainController mainController;
+    static protected MainController parentController;
 
-    static void setMainController(MainController controller){
-        mainController = controller;
+    static void setParentController(MainController controller){
+        parentController = controller;
     }
 
     /**
