@@ -6,15 +6,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.SelectModeContorller">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.SelectModeController">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <RadioButton mnemonicParsing="false" text="新規登録" />
-            <RadioButton mnemonicParsing="false" text="登録情報更新" />
-            <RadioButton mnemonicParsing="false" text="ランチャープレビュー" />
+            <RadioButton fx:id="register" mnemonicParsing="false" onAction="#onRegisterSelected" text="新規登録">
+               <toggleGroup>
+                  <ToggleGroup fx:id="defaultGroup" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="update" mnemonicParsing="false" onAction="#onUpdateSelected" text="更新" toggleGroup="$defaultGroup" />
+            <RadioButton fx:id="preview" mnemonicParsing="false" onAction="#onPreviewSelected" text="プレビュー" toggleGroup="$defaultGroup" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" text="Button" />
+      <Label fx:id="detailLabel" text="起動するモードを選択してください.&#10;    [新規登録モード]&#10;        ゲームを新たに登録します.&#10;    [更新モード]&#10;        既に登録したゲーム情報を更新します.&#10;    [プレビューモード]&#10;        ランチャーを特殊なモードで起動し,あなたのゲームがランチャー上でどのように表示されるかをチェックできます." />
+      <Button fx:id="startButton" disable="true" mnemonicParsing="false" onAction="#onStartPushed" text="モードがまだ選択されていません" />
    </children>
 </VBox>

@@ -182,9 +182,17 @@ enum MainHandler {
     }
 
     /**
+     * モードを変更して起動する.
+     */
+    final void runAsMode(Mode mode){
+        this.mode = mode;
+        runAsMode();
+    }
+
+    /**
      * 現在設定されているモードで起動する.
      */
-    final void confirm(){
+    final void runAsMode(){
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
 
         try {

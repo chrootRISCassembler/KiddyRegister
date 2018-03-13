@@ -3,7 +3,6 @@ package capslock.kiddy_register.main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,7 +30,7 @@ public class ModeConfirmingController{
 
     @FXML
     private void onConfirmPushed(ActionEvent event){
-        MainHandler.INST.confirm();
+        MainHandler.INST.runAsMode();
     }
 
     @FXML
