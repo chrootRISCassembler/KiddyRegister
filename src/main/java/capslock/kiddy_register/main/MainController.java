@@ -22,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import methg.commonlib.trivial_logger.Logger;
 
@@ -50,15 +51,25 @@ public class MainController{
     }
 
     @FXML private void onPrevClicked(ActionEvent event){
+        controller.transition();
+        final State state = stateIte.previous();
+        if(!stateIte.hasPrevious())prevButton.setVisible(false);
+        rootVBox.getChildren().set(0, state.getRootNode());
+        controller = state.getController();
+        controller.init();
 
+        nextButton.setVisible(true);
     }
 
     @FXML private void onNextClicked(ActionEvent event){
         controller.transition();
         final State state = stateIte.next();
+        if(!stateIte.hasNext())nextButton.setVisible(false);
         rootVBox.getChildren().set(0, state.getRootNode());
         controller = state.getController();
         controller.init();
+
+        prevButton.setVisible(true);
     }
 
     void disableNextButton(){

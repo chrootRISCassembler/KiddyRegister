@@ -10,7 +10,7 @@
    <children>
       <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevClicked" text="前の設定項目へ" />
+            <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevClicked" text="前の設定項目へ" visible="false" />
             <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNextClicked" text="次の設定項目へ" />
          </children>
       </HBox>
