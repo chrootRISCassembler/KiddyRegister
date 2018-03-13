@@ -21,9 +21,8 @@ public class ModeConfirmingController{
         Logger.INST.debug("ModeConfirmingController#init");
 
         if(MainHandler.INST.getMode() == Mode.REGISTER){
-            informLabel.setText("ゲーム情報を新たに登録します.違う場合はモード選択ボタンを押してください.");
         }else{
-            informLabel.setText("登録済みのゲーム情報を更新します.違う場合はモード選択ボタンを押してください.");
+            informLabel.setText("登録済みのゲーム情報を更新します.");
             confirmButton.setText("情報を更新する");
         }
     }

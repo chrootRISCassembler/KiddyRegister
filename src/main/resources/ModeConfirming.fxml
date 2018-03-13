@@ -10,11 +10,15 @@
 
 <VBox fx:id="rootVBox" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="30.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.ModeConfirmingController">
    <children>
-      <Label fx:id="informLabel" text="Label" />
-      <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#onConfirmPushed" prefHeight="240.0" prefWidth="400.0" text="設定に進む">
+      <Label fx:id="informLabel" text="ゲーム情報を新規登録します.">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#onConfirmPushed" prefHeight="200.0" prefWidth="400.0" text="新規登録する">
          <font>
             <Font size="50.0" />
          </font></Button>
+      <Label prefHeight="73.0" prefWidth="292.0" text="モードを自分で選択して登録した場合の動作は未保障です.&#10;提出したゲームがレギュレーション違反になる可能性があります." />
       <Button fx:id="selectButton" mnemonicParsing="false" onAction="#onSelectPushed" text="モードを自分で選択する" />
    </children>
    <padding>
