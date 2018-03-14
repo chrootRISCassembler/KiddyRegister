@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class MainController{
+    /**
+     * 常に「現在のState」と「次のState」の間にいる状態にする
+     */
     private ListIterator<State> stateIte;
     private ChildController controller;
 
@@ -48,12 +51,15 @@ public class MainController{
         prevButton.setDisable(true);//処理が終わる前に別スレッドがこのメソッドに入れないようにする
 
         controller.transition();
+        stateIte.previous();
         final State state = stateIte.previous();
         if(!stateIte.hasPrevious())prevButton.setVisible(false);
+        stateIte.next();
         rootVBox.getChildren().set(0, state.getRootNode());
         controller = state.getController();
         controller.init();
 
+        prevButton.setDisable(false);
         nextButton.setVisible(true);
     }
 
