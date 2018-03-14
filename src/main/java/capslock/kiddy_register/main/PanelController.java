@@ -22,7 +22,11 @@ public class PanelController extends ChildController{
     public final void init() {
         Logger.INST.debug("panel init called");
         final Path panelFile = MainHandler.INST.getPanel();
-        if (panelFile == null)return;
+
+        if (panelFile == null){
+            Logger.INST.info("Panel is null");
+            return;
+        }
 
         imageView.setImage(new Image(panelFile.toUri().toString()));
         parentController.enableNextButton();
@@ -60,5 +64,10 @@ public class PanelController extends ChildController{
                 event.acceptTransferModes(TransferMode.LINK);
         }
         event.consume();
+    }
+
+    @Override
+    void transition() {
+        imageView.setImage(null);//参照を外してGCによる回収を期待する.
     }
 }
