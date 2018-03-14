@@ -15,6 +15,7 @@ public class IDController extends ChildController{
     @FXML private ChoiceBox<Integer> choiceBox;
     @Override
     public final void init() {
+
         Logger.INST.debug("ID init called");
 
         parentController.disableNextButton();
@@ -30,5 +31,7 @@ public class IDController extends ChildController{
                         parentController.enableNextButton();
                     }
                 });
+
+
     }
 }
