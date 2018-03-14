@@ -124,11 +124,13 @@ enum MainHandler {
     }
 
     /**
-     *
-     * @param phantomPath JSONファイルに書き込まれている仮想的な相対パスから本当のファイルパスを作る.
-     * @return 実在するファイルのパス
+     * JSONファイルに書き込まれている仮想的な相対パスから本当のファイルパスを作る.
+     * @param phantomPath JSONファイルに書き込まれている仮想的な相対パス
+     * @return 実在するファイルのパス, phantomPathに{@code null}を渡すとnullを返す.
      */
     private Path toRealPath(Path phantomPath){
+        if (phantomPath == null)return null;
+
         Logger.INST.debug(() -> "portable path is \"" + phantomPath + '\"');
         final Path realPath = Paths.get(gameRootDir + "/" + phantomPath.subpath(2, phantomPath.getNameCount()));
         Logger.INST.debug(() -> "Real path is \"" + realPath + '\"');
