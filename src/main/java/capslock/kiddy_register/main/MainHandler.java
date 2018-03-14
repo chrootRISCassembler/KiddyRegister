@@ -40,7 +40,7 @@ enum MainHandler {
     INST;
 
     /**
-     * 自身のjarに保存するファイルパスのキャッシュ
+     * ゲームのルートディレクトリをキャッシュしておくプロパティファイルのパス
      */
     private static final Path PATH_CACHE = Paths.get("./.PathCache.properties");
     private static final Path JSON_PATH = Paths.get(".signature.json");
@@ -99,15 +99,6 @@ enum MainHandler {
     }
 
     final void setID(int id){ doc.setGameID(id); }
-
-//    final RegisterState nextState(){
-//        state.getController().transition();
-//        return state = state.next();
-//    }
-//    final RegisterState prevState(){
-//        return state = state.prev();
-//    }
-
 
     /**
      * 実際のパスから本番環境で稼働可能な相対パスを作る.
