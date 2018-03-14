@@ -14,8 +14,6 @@ enum  State {
     REGISTER_DESC("Desc.fxml"),
     REGISTER_PANEL("Panel.fxml"),
     REGISTER_CONTENT("Content.fxml"),
-    REGISTER_IMAGE("Image.fxml"),
-    REGISTER_MOVIE("Movie.fxml"),
     REGISTER_GAME_ID("ID.fxml"),
     WRITE_JSON("Write.fxml"),
     PREVIEW_LAUNCHER("Preview.fxml");
@@ -41,7 +39,6 @@ enum  State {
         }
 
         controller = (ChildController) loader.getController();
-
     }
 
     final ChildController getController(){

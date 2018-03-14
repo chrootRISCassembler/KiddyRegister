@@ -31,8 +31,6 @@ enum Mode {
                 constListBuilder.add(State.REGISTER_NAME);
                 constListBuilder.add(State.REGISTER_DESC);
                 constListBuilder.add(State.REGISTER_PANEL);
-                //constListBuilder.add(State.REGISTER_IMAGE);
-                //constListBuilder.add(State.REGISTER_MOVIE);
                 constListBuilder.add(State.REGISTER_CONTENT);
 
                 if (ordinal() == 0)constListBuilder.add(State.REGISTER_GAME_ID);
