@@ -62,9 +62,17 @@ enum MainHandler {
     final Path getExe(){ return doc.getExe(); }
     final String getName(){ return doc.getName(); }
     final String getDesc(){ return doc.getDesc(); }
-    final Path getPanel(){ return doc.getPanel(); }
-    final List<Path> getImageList(){ return doc.getImageList(); }
-    final List<Path> getMovieList(){ return doc.getMovieList(); }
+    final Path getPanel(){ return toRealPath(doc.getPanel()); }
+    final List<Path> getImageList(){
+        return doc.getImageList().stream()
+                .map(this::toRealPath)
+                .collect(Collectors.toList());
+    }
+    final List<Path> getMovieList(){
+        return doc.getMovieList().stream()
+            .map(this::toRealPath)
+            .collect(Collectors.toList());
+    }
     final int getID(){ return doc.getGameID(); }
 
     final void setExe(Path path){
@@ -101,7 +109,11 @@ enum MainHandler {
 //    }
 
 
-
+    /**
+     * 実際のパスから本番環境で稼働可能な相対パスを作る.
+     * @param realPath 実在するパス
+     * @return 仮想的な相対パス
+     */
     private Path toPortablePath(Path realPath){
         Logger.INST.debug(() -> "Real path is \"" + realPath + '\"');
         final Path realRelativePath = gameRootDir.relativize(realPath);
@@ -109,6 +121,18 @@ enum MainHandler {
         final Path portableRelativePath = Paths.get("Games/" + gameRootDir.getFileName() + '/' + realRelativePath);
         Logger.INST.debug(() -> "portable path is \"" + portableRelativePath + '\"');
         return portableRelativePath;
+    }
+
+    /**
+     *
+     * @param phantomPath JSONファイルに書き込まれている仮想的な相対パスから本当のファイルパスを作る.
+     * @return 実在するファイルのパス
+     */
+    private Path toRealPath(Path phantomPath){
+        Logger.INST.debug(() -> "portable path is \"" + phantomPath + '\"');
+        final Path realPath = Paths.get(gameRootDir + "/" + phantomPath.subpath(2, phantomPath.getNameCount()));
+        Logger.INST.debug(() -> "Real path is \"" + realPath + '\"');
+        return realPath;
     }
 
 
