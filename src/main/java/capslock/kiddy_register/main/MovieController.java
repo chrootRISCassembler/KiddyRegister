@@ -112,14 +112,14 @@ public class MovieController extends ChildController{
         WritableImage snapshot = new WritableImage(100, 100);
 
         player.setOnError(() -> Logger.INST.critical("play error"));
-        //player.setAutoPlay(true);
+        player.setAutoPlay(true);
         player.setCycleCount(1);
 
         if(player == null)throw new NullPointerException();
 
         final MediaView mediaView = new MediaView(player);
         mediaView.setPreserveRatio(true);
-        //mediaView.setFitWidth(100);
+        mediaView.setFitWidth(100);
         final Scene scene = new Scene (new Group(mediaView), 100, 100);
         //player.play();
         //player.pause();
@@ -132,8 +132,8 @@ public class MovieController extends ChildController{
             Logger.INST.debug("OnReady entry");
             final ImageView view = new ImageView(scene.snapshot(snapshot));
             flowPane.getChildren().add(view);
+            player.stop();
+            player.dispose();
         });
-
-        player.play();
     }
 }
