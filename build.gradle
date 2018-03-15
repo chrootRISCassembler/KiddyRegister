@@ -16,9 +16,10 @@
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.time.LocalDateTime
 
 group 'capslock'
-version '1.0.0-SNAPSHOT'
+version '1.0.0'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -66,6 +67,14 @@ dependencies {
 
 tasks.withType(JavaCompile){
     options.encoding = 'UTF-8'
+}
+
+processResources.doLast {
+    def buildInfoFile = new File(processResources.destinationDir.path + '/BuildInfo.txt')
+    buildInfoFile.bytes = []
+    buildInfoFile << 'version : ' + version + '\n'
+    buildInfoFile << 'git_commit_hash : ' +  'git rev-parse HEAD'.execute().text.trim()  + '\n'
+    buildInfoFile << 'date : ' + LocalDateTime.now()
 }
 
 compileJava.doFirst {
