@@ -15,8 +15,6 @@
 
 package capslock.kiddy_register.main;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -33,20 +31,19 @@ public class IDController extends ChildController{
 
         Logger.INST.debug("ID init called");
 
-        parentController.disableNextButton();
+        if (MainHandler.INST.getID() == 0) {
+            parentController.disableNextButton();
+            choiceBox.setItems(FXCollections.observableList(IntStream.rangeClosed(1, 100).boxed().collect(Collectors.toList())));
 
-        choiceBox.setItems(FXCollections.observableList(IntStream.rangeClosed(1, 100).boxed().collect(Collectors.toList())));
-
-        choiceBox.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                        MainHandler.INST.setID(number2.intValue());
+            choiceBox.getSelectionModel()
+                    .selectedItemProperty()
+                    .addListener((observable, oldValue, newValue) -> {
+                        MainHandler.INST.setID(newValue);
                         parentController.enableNextButton();
-                    }
-                });
-
-
+                    });
+        } else {
+            choiceBox.setValue(MainHandler.INST.getID());
+            parentController.enableNextButton();
+        }
     }
 }
