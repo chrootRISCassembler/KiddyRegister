@@ -15,21 +15,25 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.WriteController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.WriteController">
    <children>
       <Label text="以下の表は登録されている情報です.「登録情報を確定する」ボタンを押すと情報をファイルに書き込みます" />
-      <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableView">
         <columns>
-          <TableColumn fx:id="keyCol" prefWidth="75.0" text="項目" />
-          <TableColumn fx:id="valueCol" prefWidth="75.0" text="データ" />
+          <TableColumn fx:id="keyCol" prefWidth="110.0" text="項目" />
+          <TableColumn fx:id="valueCol" prefWidth="470.0" text="データ" />
         </columns>
       </TableView>
       <Button fx:id="writeButton" mnemonicParsing="false" onAction="#onWritePushed" text="登録情報を確定する" />
    </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+   </padding>
 </VBox>
