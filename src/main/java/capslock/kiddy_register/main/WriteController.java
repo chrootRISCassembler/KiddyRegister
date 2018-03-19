@@ -29,8 +29,8 @@ import methg.commonlib.trivial_logger.Logger;
 public class WriteController extends ChildController{
 
     @FXML private TableView<Field> tableView;
-    @FXML private TableColumn keyCol;
-    @FXML private TableColumn valueCol;
+    @FXML private TableColumn<String, String> keyCol;
+    @FXML private TableColumn<String, String> valueCol;
     @FXML private Button writeButton;
 
     private ObservableList<Field> data;
