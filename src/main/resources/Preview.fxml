@@ -23,7 +23,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.PreviewController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.PreviewController">
    <children>
       <Label text="登録情報が正しく反映されているかプレビューすることができます.&#10;プレビュー時点で不備がある場合,ゲーム提出が認められない可能性が高いです.">
          <font>
@@ -32,15 +32,20 @@
       </Label>
       <Button fx:id="launchButton" mnemonicParsing="false" onAction="#onLaunchPushed" text="ランチャーを起動する">
          <font>
-            <Font size="60.0" />
+            <Font size="50.0" />
          </font></Button>
       <Label text="ランチャーを閉じるまで操作を受け付けません">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
+      <Label fx:id="quitLabel" text="このウィンドウを閉じて登録を終了します.">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
    </children>
    <padding>
-      <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
 </VBox>
