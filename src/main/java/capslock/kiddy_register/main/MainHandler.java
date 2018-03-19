@@ -21,7 +21,9 @@ import capslock.game_info.JSONDBReader;
 import capslock.game_info.JSONDBWriter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.BufferedReader;
@@ -145,7 +147,8 @@ enum MainHandler {
     final void launch(){
         final Stage launcherStage = new Stage();
         final CapsLock launcher = new CapsLock();
-        launcher.InjectionPoint(launcherStage, Paths.get(gameRootDir + "/" + JSON_PATH), MainHandler.INST.getGameRootDir().toString());
+        launcherStage.initModality(Modality.APPLICATION_MODAL);
+        launcher.InjectionPoint(launcherStage, Paths.get(gameRootDir + "/" + JSON_PATH), gameRootDir.toString());
     }
 
     final void init(Stage stage){
