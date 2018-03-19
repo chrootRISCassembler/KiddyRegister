@@ -34,6 +34,7 @@ public class IDController extends ChildController{
         if (MainHandler.INST.getID() == 0) {
             parentController.disableNextButton();
             choiceBox.setItems(FXCollections.observableList(IntStream.rangeClosed(1, 100).boxed().collect(Collectors.toList())));
+            choiceBox.setStyle("-fx-font-size: 20");
 
             choiceBox.getSelectionModel()
                     .selectedItemProperty()
