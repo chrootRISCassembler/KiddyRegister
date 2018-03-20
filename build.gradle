@@ -60,8 +60,8 @@ dependencies {
     testCompile 'org.codehaus.groovy:groovy-all:2.3.11'
 
     compile name: "TrivialLogger"
+    compile name: "FileChecker"
     compile name: "capslock"
-    compile name: "file_checker"
     compile name: "game_info"
 }
 
@@ -83,11 +83,11 @@ compileJava.doFirst {
         Files.createDirectory(libDir)
     }
 
-    def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/file_checker.jar")
+    def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/FileChecker.jar")
     if (Files.notExists(file_checkerPath)) {
-        println "Downloading file_checker.jar ..."
+        println "Downloading FileChecker.jar ..."
         try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/file_checker-1.0.0-SNAPSHOT.jar")
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/FileChecker-1.1.1-SNAPSHOT.jar")
             InputStream inStream = website.openStream()
             Files.copy(inStream, file_checkerPath, StandardCopyOption.REPLACE_EXISTING)
 
@@ -138,11 +138,11 @@ task forceUpdateLib{
             Files.createDirectory(libDir)
         }
 
-        println "Downloading file_checker.jar ..."
+        println "Downloading FileChecker.jar ..."
         try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/file_checker-1.0.0-SNAPSHOT.jar")
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/FileChecker-1.1.1-SNAPSHOT.jar")
             InputStream inStream = website.openStream()
-            def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/file_checker.jar")
+            def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/FileChecker.jar")
             Files.copy(inStream, file_checkerPath, StandardCopyOption.REPLACE_EXISTING)
             println "Download succeeded "
         } catch (Exception ex) {
