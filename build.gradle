@@ -59,9 +59,9 @@ dependencies {
     compile group: 'org.json', name: 'json', version:  '+'
     testCompile 'org.codehaus.groovy:groovy-all:2.3.11'
 
+    compile name: "TrivialLogger"
     compile name: "capslock"
     compile name: "file_checker"
-    compile name: "trivial_logger"
     compile name: "game_info"
 }
 
@@ -98,11 +98,11 @@ compileJava.doFirst {
         }
     }
 
-    def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/trivial_logger.jar")
+    def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/TrivialLogger.jar")
     if (Files.notExists(trivial_loggerPath)) {
-        println "Downloading trivial_logger.jar ..."
+        println "Downloading TrivialLogger.jar ..."
         try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/trivial_logger-1.0.0-SNAPSHOT.jar")
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/TrivialLogger-1.1.1-SNAPSHOT.jar")
             InputStream inStream = website.openStream()
             Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
 
@@ -150,11 +150,11 @@ task forceUpdateLib{
             throw ex
         }
 
-        println "Downloading trivial_logger.jar ..."
+        println "Downloading TrivialLogger.jar ..."
         try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/trivial_logger-1.0.0-SNAPSHOT.jar")
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/TrivialLogger-1.1.1-SNAPSHOT.jar")
             InputStream inStream = website.openStream()
-            def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/trivial_logger.jar")
+            def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/TrivialLogger.jar")
             Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
             println "Download succeeded "
         } catch (Exception ex) {

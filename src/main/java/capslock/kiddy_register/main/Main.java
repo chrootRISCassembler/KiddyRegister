@@ -17,13 +17,10 @@ package capslock.kiddy_register.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import methg.commonlib.trivial_logger.LogLevel;
 import methg.commonlib.trivial_logger.Logger;
-
-import java.io.IOException;
 
 public class Main extends Application {
 
@@ -34,6 +31,7 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         Logger.INST.setCurrentLogLevel(LogLevel.DEBUG);
+        Logger.INST.asLocalTime();
 
         Logger.INST.info("KiddyRegister started.");
 
