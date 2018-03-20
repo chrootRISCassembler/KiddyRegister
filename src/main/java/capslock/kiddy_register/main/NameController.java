@@ -44,7 +44,7 @@ public class NameController extends ChildController{
     }
 
     @FXML private void onTextFieldReleased(KeyEvent event){
-        if(textField.getText().isEmpty()){
+        if(textField.getText().trim().isEmpty()){
             parentController.disableNextButton();
         }else{
             parentController.enableNextButton();
@@ -53,6 +53,6 @@ public class NameController extends ChildController{
 
     @Override
     public final void transition(){
-        MainHandler.INST.setName(textField.getText());
+        MainHandler.INST.setName(textField.getText().trim());
     }
 }
