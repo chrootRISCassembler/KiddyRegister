@@ -54,7 +54,7 @@ public class ContentController extends ChildController{
                 .map(path -> new ImageView(new Image(path.toUri().toString())))
                 .forEach(imageView -> {
                     imageView.setPreserveRatio(true);
-                    imageView.setFitHeight(flowPane.getPrefWidth() / 3.5);
+                    imageView.setFitWidth(flowPane.getPrefWidth() / 3.5);
                     flowPane.getChildren().add(imageView);
                 });
 
