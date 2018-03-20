@@ -15,15 +15,29 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#onDragDropped" onDragOver="#onDragOver" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.ExeController">
+<VBox fx:id="rootVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#onDragDropped" onDragExited="#onDragExited" onDragOver="#onDragOver" prefHeight="300.0" prefWidth="600.0" spacing="30.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.ExeController">
    <children>
-      <Label text="このエリアにゲームの実行ファイルをドラッグ＆ドロップしてください" />
-      <Label fx:id="pathLabel" text="まだ登録されていません" />
+      <Label text="このエリアにゲームの実行ファイルをドラッグ＆ドロップしてください">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <Label fx:id="pathLabel" text="ファイルパスがここに表示されます." />
+      <Label fx:id="warnLabel" text="まだ登録されていません." textFill="RED">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </VBox>
