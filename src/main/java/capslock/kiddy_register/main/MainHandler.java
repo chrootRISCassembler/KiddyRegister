@@ -61,7 +61,7 @@ enum MainHandler {
     }
     final Path getGameRootDir(){ return gameRootDir; }
 
-    final Path getExe(){ return doc.getExe(); }
+    final Path getExe(){ return toRealPath(doc.getExe()); }
     final String getName(){ return doc.getName(); }
     final String getDesc(){ return doc.getDesc(); }
     final Path getPanel(){ return toRealPath(doc.getPanel()); }
