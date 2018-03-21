@@ -24,9 +24,23 @@ public class DescController extends ChildController{
 
     @FXML private TextArea textArea;
 
+    private boolean needInitControl = true;
+
+    /**
+     * 入力できる最大文字長
+     */
+    static private final int MAX_INPUT_LENGTH = 256;
+
     @Override
     public final void init() {
         Logger.INST.debug("init called");
+
+        if(needInitControl){
+            textArea.textProperty().addListener(((observable, oldValue, newValue) -> {
+                if(newValue.length() > MAX_INPUT_LENGTH)textArea.setText(oldValue);
+            }));
+            needInitControl = false;
+        }
 
         final String desc = MainHandler.INST.getDesc();
         if(desc != null && !desc.isEmpty()){
