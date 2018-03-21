@@ -15,15 +15,26 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.DescController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.DescController">
    <children>
-      <TextArea fx:id="textArea" onKeyReleased="#onTextAreaReleased" prefHeight="200.0" prefWidth="200.0" />
-      <Label fx:id="pathLabel" text="ゲームの説明を入力してください" />
+      <TextArea fx:id="textArea" onKeyReleased="#onTextAreaReleased" prefHeight="200.0" prefWidth="200.0">
+         <font>
+            <Font size="20.0" />
+         </font></TextArea>
+      <Label fx:id="pathLabel" text="ゲームの説明を入力してください">
+         <font>
+            <Font size="30.0" />
+         </font></Label>
    </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
 </VBox>
