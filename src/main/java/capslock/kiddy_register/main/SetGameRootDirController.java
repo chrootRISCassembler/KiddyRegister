@@ -20,23 +20,39 @@ import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Paint;
+import methg.commonlib.file_checker.FDSkimmer;
+import methg.commonlib.trivial_logger.Logger;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.List;
 
 
 public class SetGameRootDirController extends ChildController {
     @FXML private Label pathLabel;
+    @FXML private Label warnLabel;
 
     @Override
     public final void init() {
         final Path gameRootDir = MainHandler.INST.getGameRootDir();
-        if (gameRootDir == null) {
-            pathLabel.setText("まだ指定されていません.");
-        } else {
-            pathLabel.setText(gameRootDir.toString());
+
+        if(gameRootDir == null)return;
+
+        pathLabel.setText(gameRootDir.toString());
+
+        if(Files.notExists(gameRootDir)) {
+            warnLabel.setText("ディレクトリが見つかりません.指定し直して下さい.");
+            warnLabel.setTextFill(Paint.valueOf("red"));
+            return;
+        }
+
+        if(validateRootDir(gameRootDir, false)) {
+            warnLabel.setText("設定内容は正常です.");
+            warnLabel.setTextFill(Paint.valueOf("green"));
             parentController.enableNextButton();
         }
     }
@@ -58,13 +74,64 @@ public class SetGameRootDirController extends ChildController {
         final Dragboard board = event.getDragboard();
         checkContent: if(board.hasFiles()){
             final List<File> fileList = board.getFiles();
-            if(fileList.size() != 1)break checkContent;
 
-            final Path rootDir = fileList.get(0).toPath();
-            if(!Files.isDirectory(rootDir))break checkContent;
+            if(fileList.size() != 1){
+                warnLabel.setText("ルートディレクトリは1つのみです.");
+                warnLabel.setTextFill(Paint.valueOf("red"));
+                break checkContent;
+            }
 
-            event.acceptTransferModes(TransferMode.LINK);
+            if(validateRootDir(fileList.get(0).toPath(), true)) {
+                warnLabel.setText("設定可能です.");
+                warnLabel.setTextFill(Paint.valueOf("green"));
+                event.acceptTransferModes(TransferMode.LINK);
+            }
         }
         event.consume();
+    }
+
+    @FXML private void onDragExited(DragEvent event){
+        final Path rootDir = MainHandler.INST.getGameRootDir();
+        if(rootDir == null){
+            warnLabel.setText("まだ設定されていません.");
+            warnLabel.setTextFill(Paint.valueOf("red"));
+            return;
+        }
+
+        if(validateRootDir(rootDir, false)){
+            warnLabel.setText("設定内容は正常です.");
+            warnLabel.setTextFill(Paint.valueOf("green"));
+        }
+    }
+
+    private boolean validateRootDir(Path path, boolean isBeingDragged){
+        final String demonstrative = isBeingDragged ? "その" : "この";
+        if(!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
+            Logger.INST.debug("It's not a directory.");
+            warnLabel.setTextFill(Paint.valueOf("red"));
+            warnLabel.setText(demonstrative + "ファイルはディレクトリではありません.");
+            return false;
+        }
+
+        final FDSkimmer skimmer = new FDSkimmer(path);
+        if(!skimmer.permCheck(FDSkimmer.Permission.NEED, FDSkimmer.Permission.NEED, FDSkimmer.Permission.NEED)){
+            Logger.INST.debug("Permission is not \"rwx\".");
+            warnLabel.setTextFill(Paint.valueOf("red"));
+            warnLabel.setText(demonstrative + "ディレクトリには不適切なアクセス権限が設定されています.");
+            return false;
+        }
+
+        try {
+            if(Files.list(path).count() == 0){
+                Logger.INST.debug("This dir is empty.");
+                warnLabel.setTextFill(Paint.valueOf("red"));
+                warnLabel.setText(demonstrative + "ディレクトリには中身がありません.");
+                return false;
+            }
+        }catch (IOException ex){
+            Logger.INST.logException(ex);
+        }
+
+        return true;
     }
 }
