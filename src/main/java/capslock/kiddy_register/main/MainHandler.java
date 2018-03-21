@@ -185,7 +185,8 @@ enum MainHandler {
         final Properties properties = new Properties();
         properties.setProperty("cachedGameRoot", gameRootDir.toString());
 
-        try(final BufferedWriter writer = Files.newBufferedWriter(PATH_CACHE, StandardOpenOption.CREATE)){
+        try(final BufferedWriter writer = Files.newBufferedWriter(PATH_CACHE,
+                StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)){
             properties.store(writer, null);
         }catch (IOException ex){
             Logger.INST.critical("Failed to write path of gameRootDir to " + PATH_CACHE)
