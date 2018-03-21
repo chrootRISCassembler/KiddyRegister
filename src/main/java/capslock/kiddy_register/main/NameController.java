@@ -24,9 +24,22 @@ public class NameController extends ChildController{
 
     @FXML private TextField textField;
 
+    private boolean needInitControl = true;
+    /**
+     * 入力できる最大文字長
+     */
+    static private final int MAX_INPUT_LENGTH = 64;
+
     @Override
     public final void init() {
         Logger.INST.debug("init called");
+
+        if(needInitControl){
+            textField.textProperty().addListener(((observable, oldValue, newValue) -> {
+                if(newValue.length() > MAX_INPUT_LENGTH)textField.setText(oldValue);
+            }));
+            needInitControl = false;
+        }
 
         final String name = MainHandler.INST.getName();
         if (name == null || name.isEmpty()) {
