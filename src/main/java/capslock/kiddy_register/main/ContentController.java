@@ -53,6 +53,7 @@ public class ContentController extends ChildController{
     @Override
     public final void init() {
         Logger.INST.debug("ContentController#init called");
+        boolean hasContent = false;
 
         for (final Path path : MainHandler.INST.getImageList()){
             if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS))continue;
@@ -67,6 +68,7 @@ public class ContentController extends ChildController{
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(flowPane.getPrefWidth() / 3.5);
             flowPane.getChildren().add(imageView);
+            hasContent = true;
         }
 
         for(final Path path : MainHandler.INST.getMovieList()){
@@ -87,11 +89,10 @@ public class ContentController extends ChildController{
             mediaView.setFitWidth(flowPane.getPrefWidth() / 3.5);
 
             flowPane.getChildren().add(mediaView);
+            hasContent = true;
         }
 
-        if(!movieList.isEmpty() || !imageList.isEmpty()){
-            parentController.enableNextButton();
-        }
+        if(hasContent)parentController.enableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
