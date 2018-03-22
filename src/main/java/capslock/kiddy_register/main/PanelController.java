@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
 import methg.commonlib.file_checker.FileChecker;
 import methg.commonlib.trivial_logger.Logger;
 
@@ -37,6 +38,8 @@ public class PanelController extends ChildController{
     public final void init() {
         Logger.INST.debug("panel init called");
         final Path panelFile = MainHandler.INST.getPanel();
+
+        parentController.warn("init", Color.GREEN);
 
         if (panelFile == null){
             Logger.INST.info("Panel is null");

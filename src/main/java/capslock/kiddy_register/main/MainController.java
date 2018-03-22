@@ -15,12 +15,17 @@
 
 package capslock.kiddy_register.main;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -33,6 +38,7 @@ public class MainController{
     private ChildController controller;
 
     @FXML private AnchorPane forwardPane;
+    @FXML private Label floatWarnLabel;
 
     @FXML private VBox rootVBox;
     @FXML private HBox bottomHBox;
@@ -87,5 +93,16 @@ public class MainController{
 
     void enableNextButton(){
         nextButton.setDisable(false);
+    }
+
+    void warn(String message, Color color){
+        floatWarnLabel.setText(message);
+        floatWarnLabel.setTextFill(color);
+        floatWarnLabel.setVisible(true);
+
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(2500),
+                ae -> floatWarnLabel.setVisible(false)));
+        timeline.play();
     }
 }
