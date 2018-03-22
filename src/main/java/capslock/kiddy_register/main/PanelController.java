@@ -16,37 +16,79 @@
 package capslock.kiddy_register.main;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
-import methg.commonlib.file_checker.FileChecker;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 public class PanelController extends ChildController{
 
     @FXML private ImageView imageView;
+    @FXML private Label warnLabel;
 
     @Override
     public final void init() {
         Logger.INST.debug("panel init called");
         final Path panelFile = MainHandler.INST.getPanel();
 
-        parentController.warn("init", Color.GREEN);
-
-        if (panelFile == null){
-            Logger.INST.info("Panel is null");
+        if(panelFile == null){
+            warnLabel.setText("まだ登録されていません.");
+            warnLabel.setTextFill(Color.RED);
             return;
         }
 
-        imageView.setImage(new Image(panelFile.toUri().toString()));
+        if(Files.notExists(panelFile, LinkOption.NOFOLLOW_LINKS)){
+            warnLabel.setText("ファイルが見つかりません.再登録してください.");
+            warnLabel.setTextFill(Color.RED);
+            return;
+        }
+
+        if(!Files.isRegularFile(panelFile, LinkOption.NOFOLLOW_LINKS)){
+            warnLabel.setText("このファイルは通常ファイルではありません.");
+            warnLabel.setTextFill(Color.RED);
+            return;
+        }
+
+        if(!Files.isReadable(panelFile)){
+            warnLabel.setText("このファイルはJavaから読み込むことができません.");
+            warnLabel.setTextFill(Color.RED);
+            return;
+        }
+
+        if(!panelFile.startsWith(MainHandler.INST.getGameRootDir())){
+            warnLabel.setText("このファイルはゲームのルートディレクトリ外にあります.");
+            warnLabel.setTextFill(Color.RED);
+            return;
+        }
+
+        final Image image = new Image(panelFile.toUri().toString());
+
+        if(image.isError()){
+            warnLabel.setText("このファイルは画像として読み込めません.");
+            warnLabel.setTextFill(Color.RED);
+            return;
+        }
+
+        imageView.setImage(image);
+
+        if(image.getWidth() == image.getHeight()){
+            warnLabel.setText("登録内容は正常です.");
+            warnLabel.setTextFill(Color.GREEN);
+        }else{
+            warnLabel.setText("画像は正方形ではありません.ランチャー上では正方形に正規化されます.");
+            warnLabel.setTextFill(Color.YELLOW);
+        }
+
         parentController.enableNextButton();
     }
 
@@ -54,14 +96,28 @@ public class PanelController extends ChildController{
         final Dragboard board = event.getDragboard();
         final Path panelPath = board.getFiles().get(0).toPath();
 
-        MainHandler.INST.setPanel(panelPath);
+        final Image image = new Image(panelPath.toUri().toString());
 
-        imageView.setImage(new Image(panelPath.toUri().toString()));
+        if(image.isError()){
+            parentController.warn("ドロップされたファイルは画像として読み込むことができませんでした.", Color.RED);
+        }else {
+            parentController.warn("ドロップされた画像をパネル画像として登録しました.", Color.GREEN);
+
+            if(image.getHeight() == image.getWidth()){
+                warnLabel.setText("登録内容は正常です.");
+                warnLabel.setTextFill(Color.GREEN);
+            }else {
+                warnLabel.setText("画像は正方形ではありません.ランチャー上では正方形に正規化されます.");
+                warnLabel.setTextFill(Color.YELLOW);
+            }
+
+            imageView.setImage(image);
+            MainHandler.INST.setPanel(panelPath);
+            parentController.enableNextButton();
+        }
 
         event.setDropCompleted(true);
         event.consume();
-
-        parentController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event) {
@@ -69,17 +125,28 @@ public class PanelController extends ChildController{
         checkContent:
         if (board.hasFiles()) {
             final List<File> fileList = board.getFiles();
-            if (fileList.size() != 1) break checkContent;
+            if (fileList.size() != 1) {
+                parentController.warn("パネル画像は一つのみ登録できます.", Color.RED);
+                break checkContent;
+            }
 
-            final Path exePath = fileList.get(0).toPath();
+            final Path panelPath = fileList.get(0).toPath();
 
-            final Optional<Path> panel = new FileChecker(exePath)
-                    .onCannotWrite(dummy -> true)
-                    .onCanExec(dummy -> true)
-                    .check();
+            if(!Files.isRegularFile(panelPath, LinkOption.NOFOLLOW_LINKS)){
+                parentController.warn("ドロップしようとしているものは通常ファイルではありません.", Color.RED);
+                break checkContent;
+            }
 
-            if (panel.isPresent() && panel.get().startsWith(MainHandler.INST.getGameRootDir()))
+            if(!Files.isReadable(panelPath)){
+                parentController.warn("ドロップしようとしているファイルはJavaから読み込むことができません.", Color.RED);
+                break checkContent;
+            }
+
+            if(panelPath.startsWith(MainHandler.INST.getGameRootDir())){
                 event.acceptTransferModes(TransferMode.LINK);
+            }else{
+                parentController.warn("ドロップしようとしているファイルはゲームのルートディレクトリ外にあります.", Color.RED);
+            }
         }
         event.consume();
     }

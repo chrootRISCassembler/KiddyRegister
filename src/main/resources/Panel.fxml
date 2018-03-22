@@ -15,6 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -23,12 +24,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#onDragDropped" onDragOver="#onDragOver" prefHeight="300.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.PanelController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#onDragDropped" onDragOver="#onDragOver" prefHeight="300.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.PanelController">
    <children>
       <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-      <Label text="このエリアにパネル画像をドラッグ＆ドロップしてください" />
+      <Label text="このエリアにパネル画像をドラッグ＆ドロップしてください">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label fx:id="warnLabel" text="まだ登録されていません." textFill="RED">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
    <padding>
-      <Insets left="20.0" right="20.0" top="30.0" />
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
 </VBox>
