@@ -117,7 +117,7 @@ compileJava.doFirst {
     if (Files.notExists(game_infoPath)) {
         println "Downloading game_info.jar ..."
         try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/game_info-1.0.0-SNAPSHOT.jar")
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/game_info-1.0.1-SNAPSHOT.jar")
             InputStream inStream = website.openStream()
             Files.copy(inStream, game_infoPath, StandardCopyOption.REPLACE_EXISTING)
 
@@ -164,7 +164,7 @@ task forceUpdateLib{
 
         println "Downloading game_info.jar ..."
         try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/game_info-1.0.0-SNAPSHOT.jar")
+            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/game_info-1.0.1-SNAPSHOT.jar")
             InputStream inStream = website.openStream()
             def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/game_info.jar")
             Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
