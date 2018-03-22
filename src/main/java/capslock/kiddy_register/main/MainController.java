@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -40,6 +41,7 @@ public class MainController{
     @FXML private AnchorPane forwardPane;
     @FXML private Label floatWarnLabel;
 
+    @FXML private StackPane stackPane;
     @FXML private VBox rootVBox;
     @FXML private HBox bottomHBox;
     @FXML private Button prevButton;
@@ -47,6 +49,7 @@ public class MainController{
 
     void start(List<State> stateList){
         forwardPane.setMouseTransparent(true);
+
 
         stateIte = stateList.listIterator();
 
@@ -98,6 +101,8 @@ public class MainController{
     void warn(String message, Color color){
         floatWarnLabel.setText(message);
         floatWarnLabel.setTextFill(color);
+        floatWarnLabel.autosize();
+        floatWarnLabel.setLayoutX((forwardPane.getWidth() - floatWarnLabel.getWidth()) / 2);
         floatWarnLabel.setVisible(true);
 
         Timeline timeline = new Timeline(new KeyFrame(
