@@ -18,6 +18,7 @@ package capslock.kiddy_register.main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -31,12 +32,16 @@ public class MainController{
     private ListIterator<State> stateIte;
     private ChildController controller;
 
+    @FXML private AnchorPane forwardPane;
+
     @FXML private VBox rootVBox;
     @FXML private HBox bottomHBox;
     @FXML private Button prevButton;
     @FXML private Button nextButton;
 
     void start(List<State> stateList){
+        forwardPane.setMouseTransparent(true);
+
         stateIte = stateList.listIterator();
 
         final State state = stateIte.next();

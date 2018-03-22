@@ -23,22 +23,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="rootVBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.MainController">
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.MainController">
    <children>
-      <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
+      <VBox fx:id="rootVBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevClicked" prefHeight="60.0" prefWidth="150.0" text="前の設定項目へ" visible="false">
-               <font>
-                  <Font size="18.0" />
-               </font></Button>
-            <Button fx:id="nextButton" disable="true" mnemonicParsing="false" onAction="#onNextClicked" prefHeight="60.0" prefWidth="150.0" text="次の設定項目へ">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <font>
-                  <Font size="18.0" />
-               </font></Button>
+            <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
+               <children>
+                  <Button fx:id="prevButton" mnemonicParsing="false" onAction="#onPrevClicked" prefHeight="60.0" prefWidth="150.0" text="前の設定項目へ" visible="false">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="nextButton" disable="true" mnemonicParsing="false" onAction="#onNextClicked" prefHeight="60.0" prefWidth="150.0" text="次の設定項目へ">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
+      <AnchorPane fx:id="forwardPane" prefHeight="200.0" prefWidth="200.0" />
    </children>
-</VBox>
+</StackPane>
