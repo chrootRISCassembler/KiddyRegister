@@ -14,6 +14,7 @@
 */
 
 import java.nio.file.Files
+import java.nio.file.LinkOption
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.time.LocalDateTime
@@ -55,26 +56,70 @@ buildscript {
     }
 }
 
+class PrivateLibDownload{
+    private static final String GitHubRepository = 'https://github.com/chrootRISCassembler/dependence/raw/master/'
+    String libName
+    String libVersion
+    String jarName(){libName + '-' + libVersion + '.jar'}
+    def localJarPath(){Paths.get(System.getProperty("user.dir") + "/lib/" + jarName())}
+
+    void downloadLibJar(){
+        try {
+            URL url = new URL(GitHubRepository + jarName())
+            InputStream inStream = url.openStream()
+            Files.copy(inStream, localJarPath(), StandardCopyOption.REPLACE_EXISTING)
+            println "Download " + libName +  " succeeded"
+        } catch (Exception ex) {
+            println "Download " + libName + " failed"
+            throw ex
+        }
+    }
+
+    void downloadIfNotExist(){
+        if(Files.exists(localJarPath(), LinkOption.NOFOLLOW_LINKS))downloadLibJar()
+    }
+}
+
+final fileChecker = new PrivateLibDownload()
+fileChecker.libName = "FileChecker"
+fileChecker.libVersion = "1.1.1-SNAPSHOT"
+
+final trivialLogger = new PrivateLibDownload()
+trivialLogger.libName = "TrivialLogger"
+trivialLogger.libVersion = "1.1.1-SNAPSHOT"
+
+final gameInfo = new PrivateLibDownload()
+gameInfo.libName = 'game_info'
+gameInfo.libVersion = '1.0.1-SNAPSHOT'
+
+final capslock = new PrivateLibDownload()
+capslock.libName = 'CapsLock'
+capslock.libVersion = '2.0.2'
+
 dependencies {
     compile group: 'org.json', name: 'json', version:  '+'
     testCompile 'org.codehaus.groovy:groovy-all:2.3.11'
 
-    compile name: "TrivialLogger"
-    compile name: "FileChecker"
-    compile name: "capslock"
-    compile name: "game_info"
+    compile name: fileChecker.libName, version: fileChecker.libVersion
+    compile name: trivialLogger.libName, version: trivialLogger.libVersion
+    compile name: gameInfo.libName, version: gameInfo.libVersion
+    compile name: capslock.libName, version: capslock.libVersion
 }
 
 tasks.withType(JavaCompile){
     options.encoding = 'UTF-8'
 }
 
-processResources.doLast {
-    def buildInfoFile = new File(processResources.destinationDir.path + '/BuildInfo.txt')
-    buildInfoFile.bytes = []
-    buildInfoFile << 'version : ' + version + '\n'
-    buildInfoFile << 'git_commit_hash : ' +  'git rev-parse HEAD'.execute().text.trim()  + '\n'
-    buildInfoFile << 'date : ' + LocalDateTime.now()
+processResources{
+    exclude '*.fxml'
+
+    doLast {
+        def buildInfoFile = new File(processResources.destinationDir.path + '/BuildInfo.txt')
+        buildInfoFile.bytes = []
+        buildInfoFile << 'version : ' + version + '\n'
+        buildInfoFile << 'git_commit_hash : ' +  'git rev-parse HEAD'.execute().text.trim()  + '\n'
+        buildInfoFile << 'date : ' + LocalDateTime.now()
+    }
 }
 
 compileJava.doFirst {
@@ -83,50 +128,10 @@ compileJava.doFirst {
         Files.createDirectory(libDir)
     }
 
-    def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/FileChecker.jar")
-    if (Files.notExists(file_checkerPath)) {
-        println "Downloading FileChecker.jar ..."
-        try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/FileChecker-1.1.1-SNAPSHOT.jar")
-            InputStream inStream = website.openStream()
-            Files.copy(inStream, file_checkerPath, StandardCopyOption.REPLACE_EXISTING)
-
-            println "Download succeeded "
-        } catch (Exception ex) {
-            println "Download failed"
-            throw ex
-        }
-    }
-
-    def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/TrivialLogger.jar")
-    if (Files.notExists(trivial_loggerPath)) {
-        println "Downloading TrivialLogger.jar ..."
-        try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/TrivialLogger-1.1.1-SNAPSHOT.jar")
-            InputStream inStream = website.openStream()
-            Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
-
-            println "Download succeeded "
-        } catch (Exception ex) {
-            println "Download failed"
-            throw ex
-        }
-    }
-
-    def game_infoPath = Paths.get(System.getProperty("user.dir") + "/lib/game_info.jar")
-    if (Files.notExists(game_infoPath)) {
-        println "Downloading game_info.jar ..."
-        try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/game_info-1.0.1-SNAPSHOT.jar")
-            InputStream inStream = website.openStream()
-            Files.copy(inStream, game_infoPath, StandardCopyOption.REPLACE_EXISTING)
-
-            println "Download succeeded "
-        } catch (Exception ex) {
-            println "Download failed"
-            throw ex
-        }
-    }
+    fileChecker.downloadIfNotExist()
+    trivialLogger.downloadIfNotExist()
+    gameInfo.downloadIfNotExist()
+    capslock.downloadIfNotExist()
 }
 
 task forceUpdateLib{
@@ -138,41 +143,10 @@ task forceUpdateLib{
             Files.createDirectory(libDir)
         }
 
-        println "Downloading FileChecker.jar ..."
-        try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/FileChecker-1.1.1-SNAPSHOT.jar")
-            InputStream inStream = website.openStream()
-            def file_checkerPath = Paths.get(System.getProperty("user.dir") + "/lib/FileChecker.jar")
-            Files.copy(inStream, file_checkerPath, StandardCopyOption.REPLACE_EXISTING)
-            println "Download succeeded "
-        } catch (Exception ex) {
-            println "Download failed"
-            throw ex
-        }
-
-        println "Downloading TrivialLogger.jar ..."
-        try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/TrivialLogger-1.1.1-SNAPSHOT.jar")
-            InputStream inStream = website.openStream()
-            def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/TrivialLogger.jar")
-            Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
-            println "Download succeeded "
-        } catch (Exception ex) {
-            println "Download failed"
-            throw ex
-        }
-
-        println "Downloading game_info.jar ..."
-        try {
-            URL website = new URL("https://github.com/chrootRISCassembler/dependence/raw/master/game_info-1.0.1-SNAPSHOT.jar")
-            InputStream inStream = website.openStream()
-            def trivial_loggerPath = Paths.get(System.getProperty("user.dir") + "/lib/game_info.jar")
-            Files.copy(inStream, trivial_loggerPath, StandardCopyOption.REPLACE_EXISTING)
-            println "Download succeeded "
-        } catch (Exception ex) {
-            println "Download failed"
-            throw ex
-        }
+        fileChecker.downloadLibJar()
+        trivialLogger.downloadLibJar()
+        gameInfo.downloadLibJar()
+        capslock.downloadLibJar()
     }
 }
 
