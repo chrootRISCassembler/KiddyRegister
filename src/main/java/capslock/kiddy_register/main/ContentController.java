@@ -26,19 +26,23 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import methg.commonlib.file_checker.FileChecker;
+import javafx.scene.paint.Color;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ゲームの紹介動画と紹介画像を登録させる.
  */
 public class ContentController extends ChildController{
+
+    static private final int IMAGE_HARD_MAX = 10;
+    static private final int MOVIE_HARD_MAX = 10;
 
     private final List<MediaPlayer> playerList = new ArrayList<>(3);
     private final List<Path> imageList = new ArrayList<>(3);
@@ -50,16 +54,28 @@ public class ContentController extends ChildController{
     public final void init() {
         Logger.INST.debug("ContentController#init called");
 
-        MainHandler.INST.getImageList().stream()
-                .map(path -> new ImageView(new Image(path.toUri().toString())))
-                .forEach(imageView -> {
-                    imageView.setPreserveRatio(true);
-                    imageView.setFitWidth(flowPane.getPrefWidth() / 3.5);
-                    flowPane.getChildren().add(imageView);
-                });
+        for (final Path path : MainHandler.INST.getImageList()){
+            if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS))continue;
+            if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) continue;
+            if (!Files.isReadable(path)) continue;
+            if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
 
-        for(final Path moviePath : MainHandler.INST.getMovieList()){
-            final MediaPlayer player = new MediaPlayer(new Media(moviePath.toUri().toString()));
+            final Image image = new Image(path.toUri().toString());
+            if(image.isError())continue;
+
+            final ImageView imageView = new ImageView(image);
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(flowPane.getPrefWidth() / 3.5);
+            flowPane.getChildren().add(imageView);
+        }
+
+        for(final Path path : MainHandler.INST.getMovieList()){
+            if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS))continue;
+            if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) continue;
+            if (!Files.isReadable(path)) continue;
+            if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
+
+            final MediaPlayer player = new MediaPlayer(new Media(path.toUri().toString()));
             player.setMute(true);
             player.setAutoPlay(true);
             player.setCycleCount(MediaPlayer.INDEFINITE);
@@ -73,7 +89,9 @@ public class ContentController extends ChildController{
             flowPane.getChildren().add(mediaView);
         }
 
-        parentController.enableNextButton();
+        if(!movieList.isEmpty() || !imageList.isEmpty()){
+            parentController.enableNextButton();
+        }
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -85,17 +103,25 @@ public class ContentController extends ChildController{
         final Dragboard board = event.getDragboard();
 
         for (final File file : board.getFiles()){
-            final Optional<Path> validFile = new FileChecker(file.toPath())
-                    .onCannotWrite(dummy -> true)
-                    .onCanExec(dummy -> true)
-                    .check();
+            final Path path = file.toPath();
 
-            if(!validFile.isPresent())continue;
+            if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) continue;
+            if (!Files.isReadable(path)) continue;
+            if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
 
             try {
-                final Media canFailMovie = new Media(validFile.get().toUri().toString());
+                final Media canFailMovie = new Media(path.toUri().toString());
 
                 final MediaPlayer player = new MediaPlayer(canFailMovie);
+
+                final MediaException exception = player.getError();
+                if(exception == null && movieList.size() > MOVIE_HARD_MAX){
+                    parentController.warn("紹介動画の数は" + MOVIE_HARD_MAX +
+                            "以下でなければなりません.", Color.RED);
+
+                    player.dispose();
+                    continue;
+                }
 
                 player.setMute(true);
                 player.setAutoPlay(true);
@@ -109,7 +135,7 @@ public class ContentController extends ChildController{
 
                 flowPane.getChildren().add(mediaView);
 
-                movieList.add(validFile.get());
+                movieList.add(path);
 
                 continue;
 
@@ -120,10 +146,18 @@ public class ContentController extends ChildController{
             }
 
             try {
-                final Image canFailImage = new Image(validFile.get().toUri().toString());
+                final Image canFailImage = new Image(path.toUri().toString());
 
                 final Exception exception = canFailImage.getException();
-                if(exception != null)continue;
+                if(exception == null){
+                    if(imageList.size() > IMAGE_HARD_MAX){
+                        parentController.warn("紹介画像の数は" + IMAGE_HARD_MAX +
+                                "以下でなければなりません.", Color.RED);
+                        continue;
+                    }
+                }else{
+                    continue;
+                }
 
                 final ImageView imageView = new ImageView(canFailImage);
                 imageView.setPreserveRatio(true);
@@ -131,7 +165,7 @@ public class ContentController extends ChildController{
 
                 flowPane.getChildren().add(imageView);
 
-                imageList.add(validFile.get());
+                imageList.add(path);
 
                 continue;
 
@@ -145,32 +179,44 @@ public class ContentController extends ChildController{
         MainHandler.INST.setMovieList(movieList);
         MainHandler.INST.setImageList(imageList);
 
-        if(!movieList.isEmpty() || !imageList.isEmpty()) parentController.enableNextButton();
+        if(movieList.isEmpty() && imageList.isEmpty()){
+            parentController.warn("ドロップされたファイル中に登録可能な画像,動画は存在しません.", Color.RED);
+            parentController.disableNextButton();
+        }else{
+            parentController.warn("表示されている画像,動画を登録しました.", Color.GREEN);
+            parentController.enableNextButton();
+        }
 
         event.setDropCompleted(true);
         event.consume();
     }
 
+    /**
+     * 一つでも登録できそうなものがあれば受け付ける.
+     * <p>重たいからここでは画像,動画として読み込めるかどうかのチェックは行わない.</p>
+     * @param event ドラッグイベント
+     */
     @FXML private void onDragOver(DragEvent event) {
         final Dragboard board = event.getDragboard();
 
-        if (board.hasFiles()) {
-            for (final File file : board.getFiles()){
-                final Optional<Path> validFile = new FileChecker(file.toPath())
-                        .onCannotWrite(dummy -> true)
-                        .onCanExec(dummy -> true)
-                        .check();
-
-                if(validFile.isPresent()){
-                    if(!validFile.get().startsWith(MainHandler.INST.getGameRootDir()))continue;
-
-                    //動画または画像として読み込めるかどうかのチェック
-
-                    event.acceptTransferModes(TransferMode.LINK);
-                    break;
-                }
-            }
+        if (!board.hasFiles()) {
+            event.consume();
+            return;
         }
+
+        for (final File file : board.getFiles()) {
+            final Path path = file.toPath();
+
+            if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) continue;
+            if (!Files.isReadable(path)) continue;
+            if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
+
+            event.acceptTransferModes(TransferMode.LINK);
+            event.consume();
+            return;
+        }
+
+        parentController.warn("登録できる動画,画像が一つも含まれていません.", Color.RED);
         event.consume();
     }
 
