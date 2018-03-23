@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import methg.commonlib.trivial_logger.Logger;
 
@@ -49,13 +50,13 @@ public class ExeController extends ChildController{
 
         if(Files.notExists(exe)) {
             warnLabel.setText("ファイルが見つかりません.指定し直して下さい.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
+            warnLabel.setTextFill(Color.RED);
             return;
         }
 
         if(validateExe(exe, false)){
             warnLabel.setText("登録内容は正常です.");
-            warnLabel.setTextFill(Paint.valueOf("green"));
+            warnLabel.setTextFill(Color.GREEN);
             parentController.enableNextButton();
         }
     }
@@ -66,13 +67,13 @@ public class ExeController extends ChildController{
 
         MainHandler.INST.setExe(exePath);
         pathLabel.setText(exePath.toString());
+        parentController.warn("表示されているパスをゲームの実行ファイルとして登録しました.", Color.GREEN);
+        warnLabel.setText("登録内容は正常です.");
+        warnLabel.setTextFill(Color.GREEN);
+        parentController.enableNextButton();
 
         event.setDropCompleted(true);
         event.consume();
-
-        warnLabel.setText("登録内容は正常です.");
-        warnLabel.setTextFill(Paint.valueOf("green"));
-        parentController.enableNextButton();
     }
 
     @FXML private void onDragOver(DragEvent event){
@@ -80,32 +81,16 @@ public class ExeController extends ChildController{
         checkContent: if(board.hasFiles()){
             final List<File> fileList = board.getFiles();
             if(fileList.size() != 1){
-                warnLabel.setText("ゲームの実行ファイルは1つのみ登録できます.");
-                warnLabel.setTextFill(Paint.valueOf("red"));
+                parentController.warn("ゲームの実行ファイルは1つのみ登録できます.", Color.RED);
                 break checkContent;
             }
 
             if(validateExe(fileList.get(0).toPath(), true)) {
-                warnLabel.setText("登録可能です.");
-                warnLabel.setTextFill(Paint.valueOf("green"));
+                parentController.warn("ドロップして登録します.", Color.GREEN);
                 event.acceptTransferModes(TransferMode.LINK);
             }
         }
         event.consume();
-    }
-
-    @FXML private void onDragExited(DragEvent event){
-        final Path exe = MainHandler.INST.getExe();
-        if(exe == null){
-            warnLabel.setText("まだ登録されていません.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
-            return;
-        }
-
-        if(validateExe(exe, false)){
-            warnLabel.setText("登録内容は正常です.");
-            warnLabel.setTextFill(Paint.valueOf("green"));
-        }
     }
 
     /**
@@ -116,25 +101,36 @@ public class ExeController extends ChildController{
      * @return {@code true}引数がゲームの実行ファイルとしての要件を満たす. {@code false}それ以外
      */
     private boolean validateExe(Path path, boolean isBeingDragged) {
-        final String demonstrative = isBeingDragged ? "その" : "この";
         if(!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)){
             Logger.INST.debug("It isn't a regular file.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
-            warnLabel.setText(demonstrative + "ファイルは通常ファイルではありません.");
+            if(isBeingDragged){
+                parentController.warn("ドロップしようとしているものは通常ファイルではありません.", Color.RED);
+            }else{
+                warnLabel.setTextFill(Color.RED);
+                warnLabel.setText("このファイルは通常ファイルではありません.");
+            }
             return false;
         }
 
         if(!path.startsWith(MainHandler.INST.getGameRootDir())){
             Logger.INST.debug("Exe file is at the outside of the root directory of the game.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
-            warnLabel.setText(demonstrative + "ファイルはゲームのルートディレクトリの中にありません.");
+            if(isBeingDragged){
+                parentController.warn("ドロップしようとしているファイルはゲームのルートディレクトリの中にありません.", Color.RED);
+            }else{
+                warnLabel.setTextFill(Color.RED);
+                warnLabel.setText("このファイルはゲームのルートディレクトリの中にありません.");
+            }
             return false;
         }
 
         if(!Files.isExecutable(path)){
             Logger.INST.debug("Not executable.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
-            warnLabel.setText(demonstrative + "ファイルには実行権限が与えられていません.");
+            if(isBeingDragged){
+                parentController.warn("ドロップしようとしているファイルには実行権限が与えられていません.", Color.RED);
+            }else {
+                warnLabel.setTextFill(Color.RED);
+                warnLabel.setText("このファイルには実行権限が与えられていません.");
+            }
             return false;
         }
 
@@ -147,14 +143,18 @@ public class ExeController extends ChildController{
                 Logger.INST.debug("Ok, this is exe format file.");
                 return true;
             }else{
-                warnLabel.setTextFill(Paint.valueOf("red"));
-                warnLabel.setText(demonstrative + "ファイルは実行できません.");
+                if(isBeingDragged){
+                    parentController.warn("ドロップしようとしているファイルは実行できません.", Color.RED);
+                }else {
+                    warnLabel.setTextFill(Color.RED);
+                    warnLabel.setText("このファイルは実行できません.");
+                }
                 return false;
             }
         }catch (IOException ex){
             Logger.INST.logException(ex);
-            warnLabel.setTextFill(Paint.valueOf("yellow"));
-            warnLabel.setText(demonstrative + "ファイルは実行できない可能性があります.");
+            warnLabel.setTextFill(Color.YELLOW);
+            warnLabel.setText("このファイルは実行できない可能性があります.");
             return true;
         }
     }
