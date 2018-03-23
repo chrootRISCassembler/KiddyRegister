@@ -76,7 +76,7 @@ class PrivateLibDownload{
     }
 
     void downloadIfNotExist(){
-        if(Files.exists(localJarPath(), LinkOption.NOFOLLOW_LINKS))downloadLibJar()
+        if(!Files.exists(localJarPath(), LinkOption.NOFOLLOW_LINKS))downloadLibJar()
     }
 }
 
