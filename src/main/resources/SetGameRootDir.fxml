@@ -25,7 +25,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#onDragDropped" onDragExited="#onDragExited" onDragOver="#onDragOver" prefHeight="300.0" prefWidth="600.0" spacing="30.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.SetGameRootDirController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#onDragDropped" onDragOver="#onDragOver" prefHeight="300.0" prefWidth="600.0" spacing="30.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.kiddy_register.main.SetGameRootDirController">
    <children>
       <Label text="このエリアにゲームのルートディレクトリをドラッグ＆ドロップしてください">
          <font>

@@ -20,7 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
 import methg.commonlib.file_checker.FDSkimmer;
 import methg.commonlib.trivial_logger.Logger;
 
@@ -46,13 +46,13 @@ public class SetGameRootDirController extends ChildController {
 
         if(Files.notExists(gameRootDir)) {
             warnLabel.setText("ディレクトリが見つかりません.指定し直して下さい.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
+            warnLabel.setTextFill(Color.RED);
             return;
         }
 
         if(validateRootDir(gameRootDir, false)) {
             warnLabel.setText("設定内容は正常です.");
-            warnLabel.setTextFill(Paint.valueOf("green"));
+            warnLabel.setTextFill(Color.GREEN);
             parentController.enableNextButton();
         }
     }
@@ -63,6 +63,9 @@ public class SetGameRootDirController extends ChildController {
 
         MainHandler.INST.setGameRootDir(rootPath);
         pathLabel.setText(rootPath.toString());
+        parentController.warn("表示されているパスをゲームのルートディレクトリとして設定しました.", Color.GREEN);
+        warnLabel.setTextFill(Color.GREEN);
+        warnLabel.setText("設定内容は正常です.");
 
         event.setDropCompleted(true);
         event.consume();
@@ -76,56 +79,51 @@ public class SetGameRootDirController extends ChildController {
             final List<File> fileList = board.getFiles();
 
             if(fileList.size() != 1){
-                warnLabel.setText("ルートディレクトリは1つのみです.");
-                warnLabel.setTextFill(Paint.valueOf("red"));
+                parentController.warn("ルートディレクトリは1つのみです.", Color.RED);
                 break checkContent;
             }
 
             if(validateRootDir(fileList.get(0).toPath(), true)) {
-                warnLabel.setText("設定可能です.");
-                warnLabel.setTextFill(Paint.valueOf("green"));
+                parentController.warn("ドロップして登録します.", Color.GREEN);
                 event.acceptTransferModes(TransferMode.LINK);
             }
         }
         event.consume();
     }
 
-    @FXML private void onDragExited(DragEvent event){
-        final Path rootDir = MainHandler.INST.getGameRootDir();
-        if(rootDir == null){
-            warnLabel.setText("まだ設定されていません.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
-            return;
-        }
-
-        if(validateRootDir(rootDir, false)){
-            warnLabel.setText("設定内容は正常です.");
-            warnLabel.setTextFill(Paint.valueOf("green"));
-        }
-    }
-
     private boolean validateRootDir(Path path, boolean isBeingDragged){
-        final String demonstrative = isBeingDragged ? "その" : "この";
         if(!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
             Logger.INST.debug("It's not a directory.");
-            warnLabel.setTextFill(Paint.valueOf("red"));
-            warnLabel.setText(demonstrative + "ファイルはディレクトリではありません.");
+            if(isBeingDragged){
+                parentController.warn("ドロップしようとしているものはディレクトリではありません.", Color.RED);
+            }else{
+                warnLabel.setTextFill(Color.RED);
+                warnLabel.setText("このファイルはディレクトリではありません.");
+            }
             return false;
         }
 
         final FDSkimmer skimmer = new FDSkimmer(path);
         if(!skimmer.permCheck(FDSkimmer.Permission.NEED, FDSkimmer.Permission.NEED, FDSkimmer.Permission.NEED)){
             Logger.INST.debug("Permission is not \"rwx\".");
-            warnLabel.setTextFill(Paint.valueOf("red"));
-            warnLabel.setText(demonstrative + "ディレクトリには不適切なアクセス権限が設定されています.");
+            if(isBeingDragged){
+                parentController.warn("ドロップしようとしているディレクトリには不適切なアクセス権限が設定されています.", Color.RED);
+            }else {
+                warnLabel.setTextFill(Color.RED);
+                warnLabel.setText("このディレクトリには不適切なアクセス権限が設定されています.");
+            }
             return false;
         }
 
         try {
             if(Files.list(path).count() == 0){
                 Logger.INST.debug("This dir is empty.");
-                warnLabel.setTextFill(Paint.valueOf("red"));
-                warnLabel.setText(demonstrative + "ディレクトリには中身がありません.");
+                if (isBeingDragged){
+                    parentController.warn("ドロップしようとしているディレクトリには中身がありません.", Color.RED);
+                }else{
+                    warnLabel.setTextFill(Color.RED);
+                    warnLabel.setText("このディレクトリには中身がありません.");
+                }
                 return false;
             }
         }catch (IOException ex){
