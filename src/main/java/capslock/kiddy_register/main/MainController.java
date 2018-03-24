@@ -72,6 +72,8 @@ public class MainController{
     @FXML private void onPrevClicked(ActionEvent event){
         prevButton.setDisable(true);//処理が終わる前に別スレッドがこのメソッドに入れないようにする
 
+        floatWarnLabel.setVisible(false);
+        autoHideTimer.stop();
         controller.transition();
         stateIte.previous();
         final State state = stateIte.previous();
@@ -88,6 +90,8 @@ public class MainController{
     @FXML private void onNextClicked(ActionEvent event){
         nextButton.setDisable(true);//処理が終わる前に別スレッドがこのメソッドに入れないようにする
 
+        floatWarnLabel.setVisible(false);
+        autoHideTimer.stop();
         controller.transition();
         final State state = stateIte.next();
         if(!stateIte.hasNext())nextButton.setVisible(false);
