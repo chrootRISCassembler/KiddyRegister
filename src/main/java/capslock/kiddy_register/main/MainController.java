@@ -38,6 +38,8 @@ public class MainController{
     private ListIterator<State> stateIte;
     private ChildController controller;
 
+    final private Timeline autoHideTimer;
+
     @FXML private AnchorPane forwardPane;
     @FXML private Label floatWarnLabel;
 
@@ -46,6 +48,12 @@ public class MainController{
     @FXML private HBox bottomHBox;
     @FXML private Button prevButton;
     @FXML private Button nextButton;
+
+    {
+        autoHideTimer = new Timeline(new KeyFrame(
+            Duration.millis(2500),
+            ae -> floatWarnLabel.setVisible(false)));
+    }
 
     void start(List<State> stateList){
         forwardPane.setMouseTransparent(true);
@@ -104,10 +112,6 @@ public class MainController{
         floatWarnLabel.autosize();
         floatWarnLabel.setLayoutX((forwardPane.getWidth() - floatWarnLabel.getWidth()) / 2);
         floatWarnLabel.setVisible(true);
-
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(2500),
-                ae -> floatWarnLabel.setVisible(false)));
-        timeline.play();
+        autoHideTimer.playFromStart();
     }
 }
