@@ -57,7 +57,7 @@ public class MainController{
 
     void start(List<State> stateList){
         forwardPane.setMouseTransparent(true);
-
+        if(stateList.size() == 1)nextButton.setVisible(false);
 
         stateIte = stateList.listIterator();
 
