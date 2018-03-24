@@ -33,6 +33,13 @@ public class WriteController extends ChildController{
     @FXML private TableColumn<String, String> valueCol;
     @FXML private Button writeButton;
 
+    /**
+     * 既にJSONファイルに情報を書き込んだかを表すフラグ.
+     * <p>ランチャーをプレビューモードで起動するためには有効なJSONファイルが必要なため,
+     * JSONファイルがない状態で{@link State#PREVIEW_LAUNCHER}に遷移できないようにしている</p>
+     */
+    private boolean isWritten = false;
+
     private ObservableList<Field> data;
 
     public static class Field{
@@ -72,7 +79,9 @@ public class WriteController extends ChildController{
         );
         tableView.setItems(data);
 
-        if(MainHandler.INST.getMode() == Mode.UPDATE){
+        //登録情報を確認するためだけにアップデートモードで起動される場合があるため,
+        //書き込みボタンを押さなくても次のシーンに遷移できるようにする.
+        if(isWritten || MainHandler.INST.getMode() == Mode.UPDATE){
             parentController.enableNextButton();
         }
     }
@@ -81,8 +90,14 @@ public class WriteController extends ChildController{
         writeButton.setDisable(true);
 
         MainHandler.INST.writeToJSON();
+        isWritten = true;
         MainHandler.INST.cacheGameRoot();
 
         parentController.enableNextButton();
+    }
+
+    @Override
+    void transition() {
+        writeButton.setDisable(false);
     }
 }
