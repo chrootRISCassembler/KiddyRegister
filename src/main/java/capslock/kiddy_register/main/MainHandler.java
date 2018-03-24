@@ -207,6 +207,10 @@ enum MainHandler {
      */
     final void runAsMode(Mode mode){
         this.mode = mode;
+        if(mode == Mode.REGISTER){
+            doc = new GameDocument();
+            gameRootDir = null;
+        }
         runAsMode();
     }
 
