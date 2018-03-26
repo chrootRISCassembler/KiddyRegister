@@ -31,6 +31,7 @@ import javafx.scene.paint.Color;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -68,6 +69,7 @@ public class ContentController extends ChildController{
 
             final ContentEntry entry = ContentEntry.asImage(path);
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
+            contentEntryList.add(entry);
             flowPane.getChildren().add(entry.getPane());
             //hasContent = true;
         }
@@ -81,6 +83,7 @@ public class ContentController extends ChildController{
             final ContentEntry entry = ContentEntry.asMovie(path);
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             final MediaPlayer player = new MediaPlayer(new Media(path.toUri().toString()));
+            contentEntryList.add(entry);
             flowPane.getChildren().add(entry.getPane());
             hasContent = true;
         }
@@ -97,6 +100,11 @@ public class ContentController extends ChildController{
             if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) continue;
             if (!Files.isReadable(path)) continue;
             if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
+
+            if(isDuplicated(path)) {
+                parentController.warn("登録済みのファイルのドロップを無視しました.", Color.YELLOW);
+                continue;
+            }
 
             final ContentEntry entry;
 
@@ -124,6 +132,22 @@ public class ContentController extends ChildController{
 
         event.setDropCompleted(true);
         event.consume();
+    }
+
+    /**
+     * 既に同じコンテンツが{@link #contentEntryList}に存在するかどうかチェックする.
+     * @return 既に存在する,又は例外で正常な検査ができなかったとき {@code true}, まだ存在しないとき{@code false}
+     */
+    private boolean isDuplicated(Path path){
+        for(final ContentEntry entry : contentEntryList){
+            try {
+                if(Files.isSameFile(entry.getPath(), path))return true;
+            }catch (IOException | SecurityException ex){
+                Logger.INST.warn("Failed to check for duplicate.").logException(ex);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
