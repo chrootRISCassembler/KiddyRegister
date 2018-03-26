@@ -15,6 +15,7 @@
 
 package capslock.kiddy_register.main;
 
+import capslock.kiddy_register.content.ContentEntry;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,13 +41,9 @@ import java.util.List;
  * ゲームの紹介動画と紹介画像を登録させる.
  */
 public class ContentController extends ChildController{
+    static private final int CONTENT_HARD_MAX = 20;
 
-    static private final int IMAGE_HARD_MAX = 10;
-    static private final int MOVIE_HARD_MAX = 10;
-
-    private final List<MediaPlayer> playerList = new ArrayList<>(3);
-    private final List<Path> imageList = new ArrayList<>(3);
-    private final List<Path> movieList = new ArrayList<>(3);
+    private List<ContentEntry> contentEntryList;
 
     @FXML private FlowPane flowPane;
 
@@ -55,20 +52,18 @@ public class ContentController extends ChildController{
         Logger.INST.debug("ContentController#init called");
         boolean hasContent = false;
 
+        contentEntryList = new ArrayList<>();
+
         for (final Path path : MainHandler.INST.getImageList()){
             if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS))continue;
             if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) continue;
             if (!Files.isReadable(path)) continue;
             if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
 
-            final Image image = new Image(path.toUri().toString());
-            if(image.isError())continue;
-
-            final ImageView imageView = new ImageView(image);
-            imageView.setPreserveRatio(true);
-            imageView.setFitWidth(flowPane.getPrefWidth() / 3.5);
-            flowPane.getChildren().add(imageView);
-            hasContent = true;
+            final ContentEntry entry = ContentEntry.asImage(path);
+            entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
+            flowPane.getChildren().add(entry.getPane());
+            //hasContent = true;
         }
 
         for(final Path path : MainHandler.INST.getMovieList()){
@@ -77,18 +72,10 @@ public class ContentController extends ChildController{
             if (!Files.isReadable(path)) continue;
             if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
 
+            final ContentEntry entry = ContentEntry.asMovie(path);
+            entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             final MediaPlayer player = new MediaPlayer(new Media(path.toUri().toString()));
-            player.setMute(true);
-            player.setAutoPlay(true);
-            player.setCycleCount(MediaPlayer.INDEFINITE);
-
-            playerList.add(player);
-
-            final MediaView mediaView = new MediaView(player);
-            mediaView.setPreserveRatio(true);
-            mediaView.setFitWidth(flowPane.getPrefWidth() / 3.5);
-
-            flowPane.getChildren().add(mediaView);
+            flowPane.getChildren().add(entry.getPane());
             hasContent = true;
         }
 
@@ -96,11 +83,6 @@ public class ContentController extends ChildController{
     }
 
     @FXML private void onDragDropped(DragEvent event){
-        imageList.clear();
-        movieList.clear();
-
-        transition();
-
         final Dragboard board = event.getDragboard();
 
         for (final File file : board.getFiles()){
@@ -110,83 +92,28 @@ public class ContentController extends ChildController{
             if (!Files.isReadable(path)) continue;
             if (!path.startsWith(MainHandler.INST.getGameRootDir())) continue;
 
-            try {
-                final Media canFailMovie = new Media(path.toUri().toString());
-
-                final MediaPlayer player = new MediaPlayer(canFailMovie);
-
-                final MediaException exception = player.getError();
-                if(exception == null && movieList.size() > MOVIE_HARD_MAX){
-                    parentController.warn("紹介動画の数は" + MOVIE_HARD_MAX +
-                            "以下でなければなりません.", Color.RED);
-
-                    player.dispose();
-                    continue;
-                }
-
-                player.setMute(true);
-                player.setAutoPlay(true);
-                player.setCycleCount(MediaPlayer.INDEFINITE);
-
-                playerList.add(player);
-
-                final MediaView mediaView = new MediaView(player);
-                mediaView.setPreserveRatio(true);
-                mediaView.setFitWidth(flowPane.getPrefWidth() / 3.5);
-
-                flowPane.getChildren().add(mediaView);
-
-                movieList.add(path);
-
-                continue;
-
-            }catch (MediaException ex){
-                Logger.INST.debug("This file isn't a movie.");
-            }catch (Exception ex){
-                Logger.INST.logException(ex);
-            }
+            final ContentEntry entry;
 
             try {
-                final Image canFailImage = new Image(path.toUri().toString());
-
-                final Exception exception = canFailImage.getException();
-                if(exception == null){
-                    if(imageList.size() > IMAGE_HARD_MAX){
-                        parentController.warn("紹介画像の数は" + IMAGE_HARD_MAX +
-                                "以下でなければなりません.", Color.RED);
-                        continue;
-                    }
-                }else{
-                    continue;
-                }
-
-                final ImageView imageView = new ImageView(canFailImage);
-                imageView.setPreserveRatio(true);
-                imageView.setFitWidth(flowPane.getPrefWidth() / 3.5);
-
-                flowPane.getChildren().add(imageView);
-
-                imageList.add(path);
-
-                continue;
-
-            }catch (Exception ex){
+                entry = ContentEntry.infer(path);
+            }catch (IllegalArgumentException ex){
                 Logger.INST.logException(ex);
+                Logger.INST.debug("This file is probably neither image nor movie.");
+                continue;
             }
 
-            Logger.INST.debug("This file is probably neither image nor movie.");
+            contentEntryList.add(entry);
+            flowPane.getChildren().add(entry.getPane());
         }
 
-        MainHandler.INST.setMovieList(movieList);
-        MainHandler.INST.setImageList(imageList);
-
-        if(movieList.isEmpty() && imageList.isEmpty()){
-            parentController.warn("ドロップされたファイル中に登録可能な画像,動画は存在しません.", Color.RED);
-            parentController.disableNextButton();
-        }else{
-            parentController.warn("表示されている画像,動画を登録しました.", Color.GREEN);
-            parentController.enableNextButton();
-        }
+//
+//        if(movieList.isEmpty() && imageList.isEmpty()){
+//            parentController.warn("ドロップされたファイル中に登録可能な画像,動画は存在しません.", Color.RED);
+//            parentController.disableNextButton();
+//        }else{
+//            parentController.warn("表示されている画像,動画を登録しました.", Color.GREEN);
+//            parentController.enableNextButton();
+//        }
 
         event.setDropCompleted(true);
         event.consume();
@@ -224,10 +151,17 @@ public class ContentController extends ChildController{
     @Override
     final void transition() {
         flowPane.getChildren().clear();
-        playerList.forEach(player -> {
-            player.stop();
-            player.dispose();
-        });
-        playerList.clear();
+
+        final List<Path> movieList = new ArrayList<>();
+        final List<Path> imageList = new ArrayList<>();
+
+        for(final ContentEntry content : contentEntryList){
+            (content.isMovie() ? movieList : imageList).add(content.getPath());
+            content.destructor();
+        }
+        contentEntryList = null;
+
+        MainHandler.INST.setMovieList(movieList);
+        MainHandler.INST.setImageList(imageList);
     }
 }
