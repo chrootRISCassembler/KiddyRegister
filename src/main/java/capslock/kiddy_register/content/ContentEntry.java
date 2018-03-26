@@ -81,10 +81,7 @@ public abstract class ContentEntry{
 
     public final Pane getPane(){return stackPane;}
 
-    public void resizeByWidth(double width){
-        stackPane.setPrefWidth(width);
-        stackPane.setMaxWidth(width);
-    }
+    public abstract void resizeByWidth(double width);
 
     public void resizeByHeight(double height){
         stackPane.setPrefHeight(height);

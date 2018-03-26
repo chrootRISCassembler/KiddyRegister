@@ -21,5 +21,10 @@ final class ImageContentEntry extends ContentEntry {
     }
 
     @Override
+    public void resizeByWidth(double width) {
+        imageView.setFitWidth(width);
+    }
+
+    @Override
     public final boolean isMovie(){return false;}
 }
