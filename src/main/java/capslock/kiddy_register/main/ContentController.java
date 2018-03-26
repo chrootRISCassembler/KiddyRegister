@@ -109,6 +109,7 @@ public class ContentController extends ChildController{
             }
 
             contentEntryList.add(entry);
+            entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             flowPane.getChildren().add(entry.getPane());
         }
 
