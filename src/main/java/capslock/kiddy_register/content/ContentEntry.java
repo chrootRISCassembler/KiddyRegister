@@ -20,7 +20,8 @@ public abstract class ContentEntry{
     private final Path path;
 
     static {
-        unregisterIcon = new Image(ContentEntry.class.getClassLoader().getResourceAsStream(UNREGISTER_ICON_NAME));
+        unregisterIcon = new Image(ContentEntry.class.getClassLoader().getResourceAsStream(UNREGISTER_ICON_NAME),
+                32, 32, true, true);
     }
 
     protected ContentEntry(Path path){
