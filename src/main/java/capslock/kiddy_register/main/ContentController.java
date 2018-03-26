@@ -86,6 +86,11 @@ public class ContentController extends ChildController{
         final Dragboard board = event.getDragboard();
 
         for (final File file : board.getFiles()){
+            if(contentEntryList.size() >= CONTENT_HARD_MAX){
+                parentController.warn("コンテンツの最大数 : " + CONTENT_HARD_MAX +
+                        " を超えたため,一部のファイルを無視します.", Color.RED);
+            }
+
             final Path path = file.toPath();
 
             if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) continue;
