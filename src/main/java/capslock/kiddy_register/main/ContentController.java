@@ -49,6 +49,8 @@ public class ContentController extends ChildController{
             flowPane.getChildren().remove(instance.getPane());
             contentEntryList.remove(instance);
             instance.destructor();
+
+            if(contentEntryList.isEmpty())parentController.disableNextButton();
         });
 
         contentEntryList = new ArrayList<>();
@@ -108,6 +110,8 @@ public class ContentController extends ChildController{
             contentEntryList.add(entry);
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             flowPane.getChildren().add(entry.getPane());
+
+            parentController.enableNextButton();
         }
 
         event.setDropCompleted(true);
