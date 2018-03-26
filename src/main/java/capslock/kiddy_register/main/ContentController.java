@@ -17,16 +17,10 @@ package capslock.kiddy_register.main;
 
 import capslock.kiddy_register.content.ContentEntry;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import methg.commonlib.trivial_logger.Logger;
 
@@ -57,8 +51,6 @@ public class ContentController extends ChildController{
             instance.destructor();
         });
 
-        boolean hasContent = false;
-
         contentEntryList = new ArrayList<>();
 
         for (final Path path : MainHandler.INST.getImageList()){
@@ -71,7 +63,6 @@ public class ContentController extends ChildController{
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             contentEntryList.add(entry);
             flowPane.getChildren().add(entry.getPane());
-            //hasContent = true;
         }
 
         for(final Path path : MainHandler.INST.getMovieList()){
@@ -82,13 +73,11 @@ public class ContentController extends ChildController{
 
             final ContentEntry entry = ContentEntry.asMovie(path);
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
-            final MediaPlayer player = new MediaPlayer(new Media(path.toUri().toString()));
             contentEntryList.add(entry);
             flowPane.getChildren().add(entry.getPane());
-            hasContent = true;
         }
 
-        if(hasContent)parentController.enableNextButton();
+        if(!contentEntryList.isEmpty())parentController.enableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -120,15 +109,6 @@ public class ContentController extends ChildController{
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             flowPane.getChildren().add(entry.getPane());
         }
-
-//
-//        if(movieList.isEmpty() && imageList.isEmpty()){
-//            parentController.warn("ドロップされたファイル中に登録可能な画像,動画は存在しません.", Color.RED);
-//            parentController.disableNextButton();
-//        }else{
-//            parentController.warn("表示されている画像,動画を登録しました.", Color.GREEN);
-//            parentController.enableNextButton();
-//        }
 
         event.setDropCompleted(true);
         event.consume();
