@@ -89,6 +89,7 @@ public class ContentController extends ChildController{
             if(contentEntryList.size() >= CONTENT_HARD_MAX){
                 parentController.warn("コンテンツの最大数 : " + CONTENT_HARD_MAX +
                         " を超えたため,一部のファイルを無視します.", Color.RED);
+                break;
             }
 
             final Path path = file.toPath();
@@ -107,8 +108,8 @@ public class ContentController extends ChildController{
             try {
                 entry = ContentEntry.infer(path);
             }catch (IllegalArgumentException ex){
-                Logger.INST.logException(ex);
                 Logger.INST.debug("This file is probably neither image nor movie.");
+                parentController.warn(path.getFileName() + "は動画,画像として読み込めません.", Color.RED);
                 continue;
             }
 
