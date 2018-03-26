@@ -17,7 +17,10 @@ package capslock.kiddy_register.content;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -31,6 +34,7 @@ public abstract class ContentEntry{
 
     static private final String UNREGISTER_ICON_NAME = "UnregisterIcon.png";
     static private final Image unregisterIcon;
+    static private final Tooltip tooltip = new Tooltip("クリックすると登録を解除できます.");
 
     static private Consumer<ContentEntry> unregisterEventHandler;
 
@@ -46,8 +50,13 @@ public abstract class ContentEntry{
     protected ContentEntry(Path path){
         this.path = path;
         unregisterButton = new ImageView(unregisterIcon);
+        Tooltip.install(unregisterButton, tooltip);
         unregisterButton.setEffect(new DropShadow());
         unregisterButton.setOnMouseClicked(dummy -> unregisterEventHandler.accept(this));
+
+        //イベント発生毎にオブジェクトを生成している　重たければEffectを再利用するコードに書き換える
+        unregisterButton.setOnMousePressed(dummy -> unregisterButton.setEffect(new ColorAdjust(0, 0, -0.4, 0)));
+        unregisterButton.setOnMouseReleased(dummy -> unregisterButton.setEffect(new DropShadow()));
 
         stackPane = new StackPane(unregisterButton);
         stackPane.setAlignment(Pos.TOP_RIGHT);
