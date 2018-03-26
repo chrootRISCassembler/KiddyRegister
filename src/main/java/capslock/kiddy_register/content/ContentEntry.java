@@ -10,11 +10,15 @@ import javafx.scene.layout.StackPane;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public abstract class ContentEntry{
 
     static private final String UNREGISTER_ICON_NAME = "UnregisterIcon.png";
     static private final Image unregisterIcon;
+
+    static private Consumer<ContentEntry> unregisterEventHandler;
 
     private final StackPane stackPane;
     private final ImageView unregisterButton;
@@ -29,6 +33,7 @@ public abstract class ContentEntry{
         this.path = path;
         unregisterButton = new ImageView(unregisterIcon);
         unregisterButton.setEffect(new DropShadow());
+        unregisterButton.setOnMouseClicked(dummy -> unregisterEventHandler.accept(this));
 
         stackPane = new StackPane(unregisterButton);
         stackPane.setAlignment(Pos.TOP_RIGHT);
@@ -80,6 +85,10 @@ public abstract class ContentEntry{
     public static ContentEntry asImage(Path imagePath) throws IllegalArgumentException{
         final ImageContentEntry imageEntry = new ImageContentEntry(imagePath);
         return imageEntry;
+    }
+
+    public static void setOnUnregisterButtonPushed(Consumer<ContentEntry> lambda){
+        unregisterEventHandler = lambda;
     }
 
     public final Pane getPane(){return stackPane;}

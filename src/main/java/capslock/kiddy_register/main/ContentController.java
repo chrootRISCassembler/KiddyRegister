@@ -50,6 +50,12 @@ public class ContentController extends ChildController{
     @Override
     public final void init() {
         Logger.INST.debug("ContentController#init called");
+        ContentEntry.setOnUnregisterButtonPushed(instance -> {
+            flowPane.getChildren().remove(instance.getPane());
+            contentEntryList.remove(instance);
+            instance.destructor();
+        });
+
         boolean hasContent = false;
 
         contentEntryList = new ArrayList<>();
