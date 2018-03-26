@@ -11,7 +11,6 @@ import methg.commonlib.trivial_logger.Logger;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public abstract class ContentEntry{
 
@@ -54,6 +53,7 @@ public abstract class ContentEntry{
         ContentEntry entry;
         try {
             entry = new MovieContentEntry(path);
+            return entry;
         }catch (IllegalArgumentException ex){
             Logger.INST.debug("It's not movie.");
         }
