@@ -34,6 +34,6 @@
             </FlowPane>
          </content>
       </ScrollPane>
-      <Label text="このエリアに紹介画像,動画をドラッグ＆ドロップしてください" />
+      <Label text="このエリアに紹介画像,動画をドラッグ＆ドロップしてください. 表示されているものが登録されます." />
    </children>
 </VBox>
