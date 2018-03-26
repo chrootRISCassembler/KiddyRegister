@@ -2,6 +2,7 @@ package capslock.kiddy_register.content;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -27,6 +28,7 @@ public abstract class ContentEntry{
     protected ContentEntry(Path path){
         this.path = path;
         unregisterButton = new ImageView(unregisterIcon);
+        unregisterButton.setEffect(new DropShadow());
 
         stackPane = new StackPane(unregisterButton);
         stackPane.setAlignment(Pos.TOP_RIGHT);
