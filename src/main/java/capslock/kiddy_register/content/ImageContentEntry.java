@@ -26,5 +26,10 @@ final class ImageContentEntry extends ContentEntry {
     }
 
     @Override
+    public void resizeByHeight(double height) {
+        imageView.setFitHeight(height);
+    }
+
+    @Override
     public final boolean isMovie(){return false;}
 }

@@ -82,10 +82,7 @@ public abstract class ContentEntry{
     public final Pane getPane(){return stackPane;}
 
     public abstract void resizeByWidth(double width);
-
-    public void resizeByHeight(double height){
-        stackPane.setPrefHeight(height);
-    }
+    public abstract void resizeByHeight(double height);
 
     /**
      * コンテンツが動画かどうかを返す

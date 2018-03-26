@@ -44,6 +44,11 @@ final class MovieContentEntry extends ContentEntry {
     }
 
     @Override
+    public void resizeByHeight(double height) {
+        mediaView.setFitHeight(height);
+    }
+
+    @Override
     public final boolean isMovie(){return true;}
 
     @Override
