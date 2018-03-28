@@ -54,12 +54,12 @@ final class MovieContentEntry extends ContentEntry {
     }
 
     @Override
-    public void resizeByWidth(double width) {
+    public final void resizeByWidth(double width) {
         mediaView.setFitWidth(width);
     }
 
     @Override
-    public void resizeByHeight(double height) {
+    public final void resizeByHeight(double height) {
         mediaView.setFitHeight(height);
     }
 

@@ -36,12 +36,12 @@ final class ImageContentEntry extends ContentEntry {
     }
 
     @Override
-    public void resizeByWidth(double width) {
+    public final void resizeByWidth(double width) {
         imageView.setFitWidth(width);
     }
 
     @Override
-    public void resizeByHeight(double height) {
+    public final void resizeByHeight(double height) {
         imageView.setFitHeight(height);
     }
 
