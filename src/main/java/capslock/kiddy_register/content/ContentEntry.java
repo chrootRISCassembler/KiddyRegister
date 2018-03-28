@@ -47,6 +47,10 @@ public abstract class ContentEntry{
                 32, 32, true, true);
     }
 
+    /**
+     * サブクラスに共通のコンストラクタ.
+     * @param path コンテンツのファイルパス
+     */
     ContentEntry(Path path){
         this.path = path;
         unregisterButton = new ImageView(unregisterIcon);
@@ -62,6 +66,10 @@ public abstract class ContentEntry{
         stackPane.setAlignment(Pos.TOP_RIGHT);
     }
 
+    /**
+     * コンテンツを表示する{@link Node}を{@link #stackPane}に設定する.
+     * @param contentDisplayNode
+     */
     final void setContentDisplayNode(Node contentDisplayNode){
         stackPane.getChildren().add(0, contentDisplayNode);
     }
@@ -104,20 +112,37 @@ public abstract class ContentEntry{
      * 引数のパスが画像だとわかるときのstatic factory method
      * @param imagePath 画像のファイルパス.
      * @return 画像を表示する {@link ContentEntry}のインスタンス.
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException JavaFXがロード出来る形式の画像ファイルでないかロードに失敗した.
      */
     public static ContentEntry asImage(Path imagePath) throws IllegalArgumentException{
         final ImageContentEntry imageEntry = new ImageContentEntry(imagePath);
         return imageEntry;
     }
 
+    /**
+     * 登録解除ボタンが押されたときのイベントハンドラを登録する.
+     * @param lambda ボタンが押されたときに呼び出される{@link Consumer}&lt;{@link ContentEntry}&gt;
+     */
     public static void setOnUnregisterButtonPushed(Consumer<ContentEntry> lambda){
         unregisterEventHandler = lambda;
     }
 
+    /**
+     * コンテンツを表示する{@link Pane}を返す.
+     * @return JavaFXの {@link Node}
+     */
     public final Pane getPane(){return stackPane;}
 
+    /**
+     * アス比を保ったまま,横の長さでコンテンツのリサイズをする.
+     * @param width リサイズする横の長さ
+     */
     public abstract void resizeByWidth(double width);
+
+    /**
+     * アス比を保ったまま,縦の長さでコンテンツのリサイズをする.
+     * @param height リサイズする縦の長さ
+     */
     public abstract void resizeByHeight(double height);
 
     /**
@@ -132,5 +157,9 @@ public abstract class ContentEntry{
      */
     public final Path getPath(){return path;}
 
+    /**
+     * 割り当てられているリソースを解放する.
+     * <p>{@link MovieContentEntry}用.明示的にリソースを解放するメソッドを呼び出さないといけないオブジェクある.</p>
+     */
     public void destructor(){}
 }

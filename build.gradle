@@ -13,6 +13,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
+import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.LinkOption
 import java.nio.file.Paths
@@ -157,4 +159,18 @@ task cpFXML(type: Copy){
 
 run {
     tasks.cpFXML.execute()
+}
+
+javadoc {
+    options.charSet = 'UTF-8'
+    options.encoding = 'UTF-8'
+    options.links 'https://docs.oracle.com/javase/jp/8/docs/api/'
+    options.links 'https://docs.oracle.com/javase/jp/8/javafx/api/'
+
+    doLast{
+        //デフォルトブラウザで生成したjavadocを自動で開く
+        def userDir = System.getProperty("user.dir")
+        def indexURI = new URI(userDir.replace('\\', '/') + "/build/docs/javadoc/index.html")
+        Desktop.getDesktop().browse(indexURI)
+    }
 }
