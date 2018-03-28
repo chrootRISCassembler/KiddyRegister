@@ -47,7 +47,7 @@ public abstract class ContentEntry{
                 32, 32, true, true);
     }
 
-    protected ContentEntry(Path path){
+    ContentEntry(Path path){
         this.path = path;
         unregisterButton = new ImageView(unregisterIcon);
         Tooltip.install(unregisterButton, tooltip);
@@ -62,7 +62,7 @@ public abstract class ContentEntry{
         stackPane.setAlignment(Pos.TOP_RIGHT);
     }
 
-    protected final void setContentDisplayNode(Node contentDisplayNode){
+    final void setContentDisplayNode(Node contentDisplayNode){
         stackPane.getChildren().add(0, contentDisplayNode);
     }
 
