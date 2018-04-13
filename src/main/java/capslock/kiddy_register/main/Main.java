@@ -22,6 +22,9 @@ import javafx.stage.Stage;
 import methg.commonlib.trivial_logger.LogLevel;
 import methg.commonlib.trivial_logger.Logger;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+
 public class Main extends Application {
 
     /**
@@ -32,6 +35,11 @@ public class Main extends Application {
 
         Logger.INST.setCurrentLogLevel(LogLevel.DEBUG);
         Logger.INST.asLocalTime();
+        try {
+            Logger.INST.setLogFile(Paths.get("./KiddyRegister.log"));
+        }catch (IOException ex){
+            Logger.INST.critical("Failed to open ./KiddyRegister.log as a log file.").logException(ex);
+        }
 
         Logger.INST.info("KiddyRegister started.");
 
