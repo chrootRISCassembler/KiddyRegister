@@ -123,6 +123,10 @@ processResources{
     }
 }
 
+compileJava{
+    options.compilerArgs.add "-Xlint"
+}
+
 compileJava.doFirst {
     def libDir = Paths.get(System.getProperty("user.dir") + "/lib/")
     if (Files.notExists(libDir)) {
@@ -156,9 +160,7 @@ task cpFXML(type: Copy){
     into 'build/classes/java/main/capslock/kiddy_register/main'
 }
 
-run {
-    tasks.cpFXML.execute()
-}
+run.dependsOn cpFXML
 
 javadoc {
     options.charSet = 'UTF-8'

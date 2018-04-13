@@ -138,7 +138,7 @@ enum MainHandler {
 
         doc.setLastMod(Instant.now());
         try {
-            new JSONDBWriter(writePath).add(doc).flush();
+            new JSONDBWriter().add(doc).flush(writePath);
         }catch (IOException ex){
             Logger.INST.logException(ex);
         }
