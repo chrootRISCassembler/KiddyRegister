@@ -21,7 +21,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.File;

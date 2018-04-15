@@ -19,7 +19,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import methg.commonlib.trivial_logger.Logger;
 
 import java.nio.file.Path;
 
