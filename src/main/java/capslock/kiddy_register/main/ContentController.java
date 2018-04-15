@@ -50,10 +50,15 @@ public class ContentController extends ChildController{
             contentEntryList.remove(instance);
             instance.destructor();
 
-            if(contentEntryList.isEmpty())parentController.disableNextButton();
+            final var imageEntry = contentEntryList.parallelStream()
+                    .filter(entry -> !entry.isMovie())
+                    .findAny();
+            if(!imageEntry.isPresent())parentController.disableNextButton();
         });
 
         contentEntryList = new ArrayList<>();
+
+        boolean hasImage = false;
 
         for (final Path path : MainHandler.INST.getImageList()){
             if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS))continue;
@@ -65,6 +70,7 @@ public class ContentController extends ChildController{
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             contentEntryList.add(entry);
             flowPane.getChildren().add(entry.getPane());
+            hasImage = true;
         }
 
         for(final Path path : MainHandler.INST.getMovieList()){
@@ -79,7 +85,7 @@ public class ContentController extends ChildController{
             flowPane.getChildren().add(entry.getPane());
         }
 
-        if(!contentEntryList.isEmpty())parentController.enableNextButton();
+        if(hasImage)parentController.enableNextButton();
     }
 
     @FXML private void onDragDropped(DragEvent event){
@@ -116,8 +122,7 @@ public class ContentController extends ChildController{
             contentEntryList.add(entry);
             entry.resizeByWidth(flowPane.getPrefWidth() / 3.5);
             flowPane.getChildren().add(entry.getPane());
-
-            parentController.enableNextButton();
+            if(!entry.isMovie()) parentController.enableNextButton();
         }
 
         event.setDropCompleted(true);

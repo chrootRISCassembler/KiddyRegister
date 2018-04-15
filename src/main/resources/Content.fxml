@@ -27,13 +27,13 @@
    <children>
       <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="280.0" prefViewportHeight="280.0" prefViewportWidth="600.0" prefWidth="600.0" style="-fx-background-color: transparent;">
          <content>
-            <FlowPane fx:id="flowPane" hgap="10.0" prefHeight="280.0" prefWidth="600.0" style="-fx-background-color: lightblue;" vgap="5.0">
+            <FlowPane fx:id="flowPane" hgap="10.0" prefHeight="250.0" prefWidth="598.0" style="-fx-background-color: lightblue;" vgap="5.0">
                <padding>
                   <Insets bottom="5.0" left="20.0" right="10.0" top="5.0" />
                </padding>
             </FlowPane>
          </content>
       </ScrollPane>
-      <Label text="このエリアに紹介画像,動画をドラッグ＆ドロップしてください. 表示されているものが登録されます." />
+      <Label prefHeight="60.0" prefWidth="440.0" text="このエリアに紹介画像,動画をドラッグ＆ドロップしてください. 表示されているものが登録されます.&#10;少なくとも1枚の画像が必要です." />
    </children>
 </VBox>
