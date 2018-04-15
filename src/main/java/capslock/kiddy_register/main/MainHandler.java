@@ -227,7 +227,7 @@ enum MainHandler {
             Logger.INST.logException(ex);
         }
 
-        final MainController controller = (MainController) loader.getController();
+        final MainController controller = loader.getController();
         ChildController.parentController = controller;
         controller.start(mode.getStateList());
     }

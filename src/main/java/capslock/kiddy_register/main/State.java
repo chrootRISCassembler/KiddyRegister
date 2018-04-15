@@ -53,7 +53,7 @@ enum  State {
             return;
         }
 
-        controller = (ChildController) loader.getController();
+        controller = loader.getController();
     }
 
     final ChildController getController(){
