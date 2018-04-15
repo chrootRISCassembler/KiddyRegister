@@ -103,8 +103,7 @@ public abstract class ContentEntry{
      * @return 動画を表示する {@link ContentEntry}のインスタンス.
      */
     public static ContentEntry asMovie(Path moviePath) throws IllegalArgumentException {
-        final MovieContentEntry movieEntry = new MovieContentEntry(moviePath);
-        return movieEntry;
+        return new MovieContentEntry(moviePath);
     }
 
     /**
@@ -114,8 +113,7 @@ public abstract class ContentEntry{
      * @throws IllegalArgumentException JavaFXがロード出来る形式の画像ファイルでないかロードに失敗した.
      */
     public static ContentEntry asImage(Path imagePath) throws IllegalArgumentException{
-        final ImageContentEntry imageEntry = new ImageContentEntry(imagePath);
-        return imageEntry;
+        return new ImageContentEntry(imagePath);
     }
 
     /**
