@@ -23,7 +23,7 @@ import javafx.scene.control.RadioButton;
 import methg.commonlib.trivial_logger.Logger;
 
 public class SelectModeController{
-    private Mode selecetedMode;
+    private Mode selectedMode;
 
     @FXML private RadioButton register;
     @FXML private RadioButton update;
@@ -36,11 +36,11 @@ public class SelectModeController{
     }
 
     @FXML private void onStartPushed(ActionEvent event){
-        MainHandler.INST.runAsMode(selecetedMode);
+        MainHandler.INST.runAsMode(selectedMode);
     }
 
     @FXML private void onRegisterSelected(ActionEvent event){
-        selecetedMode = Mode.REGISTER;
+        selectedMode = Mode.REGISTER;
         detailLabel.setText("新規登録モード\r\t一度も登録していないゲームを登録します." +
                 "\n\t以前に登録したゲームに対してこのモードを使用しないでください." +
                 "\n\tゲーム提出が認められない場合があります.");
@@ -49,7 +49,7 @@ public class SelectModeController{
     }
 
     @FXML private void onUpdateSelected(ActionEvent event){
-        selecetedMode = Mode.UPDATE;
+        selectedMode = Mode.UPDATE;
         detailLabel.setText("更新モード\n\t一度登録したゲーム情報を更新します." +
                 "\n\t以下の場合は更新を行って下さい." +
                 "\n\t\t+ ゲームの実行ファイルを変更,移動した" +
@@ -61,7 +61,7 @@ public class SelectModeController{
     }
 
     @FXML private void onPreviewSelected(ActionEvent event){
-        selecetedMode = Mode.PREVIEW;
+        selectedMode = Mode.PREVIEW;
         detailLabel.setText("プレビューモード" +
                 "\n\t登録済みゲームがランチャーで正しく表示されるかチェックすることができます." +
                 "\n\tこのモードでは登録情報を更新することができません.");
