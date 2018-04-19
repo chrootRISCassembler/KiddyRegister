@@ -76,6 +76,10 @@ enum MainHandler {
     }
     final int getID(){ return doc.getGameID(); }
 
+    //あとでコピーを生成してコピーの参照を返すように書き換えるべき.
+    //このenumインスタンスがメンバとして持っているdocを外部から変更されるとバグの温床になる
+    final GameDocument getDocument(){return doc;}
+
     final void setExe(Path path){
         doc.setExe(toPortablePath(path));
         Logger.INST.info(() -> "Exe will save as " + doc.getExe().toString());

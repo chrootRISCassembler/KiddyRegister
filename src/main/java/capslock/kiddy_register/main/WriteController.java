@@ -15,6 +15,7 @@
 
 package capslock.kiddy_register.main;
 
+import capslock.game_info.GameDocument;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -68,14 +69,17 @@ public class WriteController extends ChildController{
         keyCol.setCellValueFactory(new PropertyValueFactory<>("key"));
         valueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
 
+        final GameDocument constDocRef = MainHandler.INST.getDocument();
+        System.out.println("Exe path is" + MainHandler.INST.getExe());
+
         data = FXCollections.observableArrayList(
-                new Field("ゲームの実行ファイル", MainHandler.INST.getExe().toString()),
-                new Field("ゲーム名", MainHandler.INST.getName()),
-                new Field("ゲームの説明", MainHandler.INST.getDesc()),
-                new Field("パネル画像", MainHandler.INST.getPanel().toString()),
-                new Field("紹介画像", MainHandler.INST.getImageList().toString()),
-                new Field("紹介動画", MainHandler.INST.getMovieList().toString()),
-                new Field("ゲームID", Integer.toString(MainHandler.INST.getID()))
+                new Field("ゲームの実行ファイル", constDocRef.getExe().toString()),
+                new Field("ゲーム名", constDocRef.getName()),
+                new Field("ゲームの説明", constDocRef.getDesc()),
+                new Field("パネル画像", constDocRef.getPanel().toString()),
+                new Field("紹介画像", constDocRef.getImageList().toString()),
+                new Field("紹介動画", constDocRef.getMovieList().toString()),
+                new Field("ゲームID", Integer.toString(constDocRef.getGameID()))
         );
         tableView.setItems(data);
 
