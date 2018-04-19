@@ -27,6 +27,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import methg.commonlib.trivial_logger.Logger;
 
+import java.io.File;
+
 public class WriteController extends ChildController{
 
     @FXML private TableView<Field> tableView;
@@ -73,14 +75,16 @@ public class WriteController extends ChildController{
         System.out.println("Exe path is" + MainHandler.INST.getExe());
 
         data = FXCollections.observableArrayList(
-                new Field("ゲームの実行ファイル", constDocRef.getExe().toString()),
+                new Field("実行ファイル", constDocRef.getExe().toString()),
                 new Field("ゲーム名", constDocRef.getName()),
                 new Field("ゲームの説明", constDocRef.getDesc()),
                 new Field("パネル画像", constDocRef.getPanel().toString()),
-                new Field("紹介画像", constDocRef.getImageList().toString()),
-                new Field("紹介動画", constDocRef.getMovieList().toString()),
-                new Field("ゲームID", Integer.toString(constDocRef.getGameID()))
+                new Field("紹介画像", constDocRef.getImageList().toString())
         );
+
+        if(!constDocRef.getMovieList().isEmpty())data.add(new Field("紹介動画", constDocRef.getMovieList().toString()));
+        data.add(new Field("ゲームID", Integer.toString(constDocRef.getGameID())));
+
         tableView.setItems(data);
 
         //登録情報を確認するためだけにアップデートモードで起動される場合があるため,
