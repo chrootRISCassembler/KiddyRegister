@@ -25,9 +25,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.File;
+import java.util.Comparator;
 
 public class WriteController extends ChildController{
 
@@ -84,6 +86,12 @@ public class WriteController extends ChildController{
 
         if(!constDocRef.getMovieList().isEmpty())data.add(new Field("紹介動画", constDocRef.getMovieList().toString()));
         data.add(new Field("ゲームID", Integer.toString(constDocRef.getGameID())));
+
+        final var maxWidth = data.parallelStream()
+                .map(field -> new Text(field.getValue()).getLayoutBounds().getWidth())
+                .max(Double::compareTo);
+
+        valueCol.setPrefWidth(maxWidth.get() + 10);
 
         tableView.setItems(data);
 
