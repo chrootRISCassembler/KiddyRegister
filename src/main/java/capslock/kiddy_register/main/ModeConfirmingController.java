@@ -30,12 +30,15 @@ public class ModeConfirmingController{
 
     @FXML private Label informLabel;
     @FXML private Button confirmButton;
+    @FXML private Label selectWarnLabel;
     @FXML private Button selectButton;
 
     public final void init() {
         Logger.INST.debug("ModeConfirmingController#init");
 
         if(MainHandler.INST.getMode() == Mode.REGISTER){
+            selectWarnLabel.setVisible(false);
+            selectButton.setVisible(false);
         }else{
             informLabel.setText("登録済みのゲーム情報を更新します.");
             confirmButton.setText("情報を更新する");
