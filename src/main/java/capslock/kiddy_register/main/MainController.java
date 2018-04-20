@@ -56,6 +56,8 @@ public class MainController{
     }
 
     void start(List<State> stateList){
+        MainHandler.INST.getStage().setTitle("ゲーム情報登録ツール　[" + MainHandler.INST.getMode().getJPName() + ']');
+
         forwardPane.setMouseTransparent(true);
         if(stateList.size() == 1)nextButton.setVisible(false);
 

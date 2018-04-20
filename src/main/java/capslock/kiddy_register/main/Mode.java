@@ -23,15 +23,30 @@ enum Mode {
     /**
      * ゲーム情報を新規登録する.
      */
-    REGISTER,
+    REGISTER{
+        @Override
+        public String getJPName() {
+            return "新規登録モード";
+        }
+    },
     /**
      * 登録済みゲーム情報を更新する.
      */
-    UPDATE,
+    UPDATE{
+        @Override
+        public String getJPName() {
+            return "更新モード";
+        }
+    },
     /**
      * ランチャーでの表示を確かめる.
      */
-    PREVIEW;
+    PREVIEW{
+        @Override
+        public String getJPName() {
+            return "プレビューモード";
+        }
+    };
 
     private final List<State> stateList;
 
@@ -61,4 +76,5 @@ enum Mode {
     public List<State> getStateList() {
         return stateList;
     }
+    public abstract String getJPName();
 }
