@@ -27,8 +27,8 @@
       <Label text="以下の表は登録されている情報です.「登録情報を確定する」ボタンを押すと情報をファイルに書き込みます" />
       <TableView fx:id="tableView">
         <columns>
-          <TableColumn fx:id="keyCol" prefWidth="110.0" text="項目" />
-          <TableColumn fx:id="valueCol" prefWidth="470.0" text="データ" />
+          <TableColumn fx:id="keyCol" maxWidth="80.0" text="項目" />
+          <TableColumn fx:id="valueCol" minWidth="8.0" prefWidth="511.0" text="データ" />
         </columns>
       </TableView>
       <Button fx:id="writeButton" mnemonicParsing="false" onAction="#onWritePushed" text="登録情報を確定する" />
