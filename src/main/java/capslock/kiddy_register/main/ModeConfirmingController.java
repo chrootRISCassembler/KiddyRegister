@@ -49,10 +49,11 @@ public class ModeConfirmingController{
 
     @FXML
     private void onSelectPushed(ActionEvent event){
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectMode.fxml"));
+        final var loader = new FXMLLoader(getClass().getResource("SelectMode.fxml"));
 
         try {
             MainHandler.INST.getStage().setScene(new Scene(loader.load()));
+            ((SelectModeController) loader.getController()).init();
         } catch (IOException ex) {
             Logger.INST.critical("Failed to load SelectMode.fxml").logException(ex);
         }
