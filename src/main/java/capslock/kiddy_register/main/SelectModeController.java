@@ -33,10 +33,6 @@ public class SelectModeController{
 
     public final void init() {
         Logger.INST.debug("SelectModeController init called");
-        if(MainHandler.INST.getMode() == Mode.REGISTER){
-            update.setDisable(true);
-            update.setVisible(false);
-        }
     }
 
     @FXML private void onStartPushed(ActionEvent event){
